@@ -1,0 +1,120 @@
+{
+  "configVersion": 1,
+  "timestamp": 1564778892545,
+  "index": "/index.html",
+  "assetGroups": [
+    {
+      "name": "app",
+      "installMode": "prefetch",
+      "updateMode": "prefetch",
+      "urls": [
+        "/5.c48354f564f45baa8c2c.js",
+        "/index.html",
+        "/main.96b991fb529243ee5409.js",
+        "/polyfills-es5.23652b7609e10bc79e16.js",
+        "/polyfills.46985849887403b67e3d.js",
+        "/runtime.d8796841034d661d71f0.js",
+        "/styles.c0544b5bf86060629ff1.css"
+      ],
+      "patterns": []
+    },
+    {
+      "name": "assets",
+      "installMode": "lazy",
+      "updateMode": "prefetch",
+      "urls": [
+        "/assets/cryptomaniacs.png",
+        "/assets/favicon/android-chrome-192x192.png",
+        "/assets/favicon/android-chrome-512x512.png",
+        "/assets/favicon/apple-touch-icon.png",
+        "/assets/favicon/browserconfig.xml",
+        "/assets/favicon/favicon-16x16.png",
+        "/assets/favicon/favicon-32x32.png",
+        "/assets/favicon/favicon.ico",
+        "/assets/favicon/mstile-150x150.png",
+        "/assets/favicon/site.webmanifest",
+        "/assets/fonts/sansation_regular-webfont.woff",
+        "/assets/fonts/sansation_regular-webfont.woff2",
+        "/assets/icons/icon-128x128.png",
+        "/assets/icons/icon-144x144.png",
+        "/assets/icons/icon-152x152.png",
+        "/assets/icons/icon-192x192.png",
+        "/assets/icons/icon-384x384.png",
+        "/assets/icons/icon-512x512.png",
+        "/assets/icons/icon-72x72.png",
+        "/assets/icons/icon-96x96.png",
+        "/assets/loading.svg",
+        "/assets/logo-light.svg",
+        "/assets/logo-small-with-title-light.svg",
+        "/assets/logo-small-with-title-very-light.svg",
+        "/assets/logo-small-with-title.svg",
+        "/assets/logo-very-light.svg",
+        "/assets/logo-with-title-light.svg",
+        "/assets/logo-with-title-very-light..svg",
+        "/assets/logo-with-title.svg",
+        "/assets/logo.svg",
+        "/assets/metamask-fox.svg"
+      ],
+      "patterns": []
+    }
+  ],
+  "dataGroups": [],
+  "hashTable": {
+    "/5.c48354f564f45baa8c2c.js": "19793795f13190d490319afc3ffbd47011f80b4a",
+    "/assets/cryptomaniacs.png": "550cf4c6ce74f53a3d5f975f3a0b033bda6de8f8",
+    "/assets/favicon/android-chrome-192x192.png": "f12babda8cb1cc8b4191701ea59daee65dc5dc39",
+    "/assets/favicon/android-chrome-512x512.png": "7a2ad8aeb85ed8e462edcc53463fb85a3f8d20c6",
+    "/assets/favicon/apple-touch-icon.png": "1ad83220bcdd4f59c7bf3bed5788eaec152eeb35",
+    "/assets/favicon/browserconfig.xml": "ee6ed6b5db289c5cf287579fc610001dc20f7854",
+    "/assets/favicon/favicon-16x16.png": "1730e038d24a98d880da07bd9da2883979880bb7",
+    "/assets/favicon/favicon-32x32.png": "7d7922a57c27d20a1eaf0f72d8c47ad411dc0f91",
+    "/assets/favicon/favicon.ico": "750cfc9cb3ba1e5c62e4ea1655b5072ea52305f4",
+    "/assets/favicon/mstile-150x150.png": "0b3314080c8f2791799a0602f46d607cf3d171f2",
+    "/assets/favicon/site.webmanifest": "bc396efbe606e1790b8ef1482dacc410faab0e68",
+    "/assets/fonts/sansation_regular-webfont.woff": "60c212933f26fa158a0bc07efb459633f9c7ffcf",
+    "/assets/fonts/sansation_regular-webfont.woff2": "5eedd7b870b46ec02006dfd35062020ca4f88b93",
+    "/assets/icons/icon-128x128.png": "c039474fba393a5a0a89220fa5c2950ad77530e6",
+    "/assets/icons/icon-144x144.png": "2ce4bfed02d55d460cd57a9db4b893e212de7d59",
+    "/assets/icons/icon-152x152.png": "f145569170cc2768d5c27ae66750702565db92fa",
+    "/assets/icons/icon-192x192.png": "c4e7f18991ba937865ade9f218db54f5d5fc723e",
+    "/assets/icons/icon-384x384.png": "08d6390fbd00595faf4ba7c8d8adfca860778c68",
+    "/assets/icons/icon-512x512.png": "7a2ad8aeb85ed8e462edcc53463fb85a3f8d20c6",
+    "/assets/icons/icon-72x72.png": "62424ed4703f82e1c8a5acc695f30b9a487a9288",
+    "/assets/icons/icon-96x96.png": "8c4cb8babbcd580a8dd3f8e3d8b70c3bfebccf19",
+    "/assets/loading.svg": "2499889d2f55e222c14c176951c7077f2095e75e",
+    "/assets/logo-light.svg": "b86e15370e100ed7d4226b84a72c0260e6bb291d",
+    "/assets/logo-small-with-title-light.svg": "dc184f930167ee6cf6cbf9d699b50416ba0dac21",
+    "/assets/logo-small-with-title-very-light.svg": "a1c34c22e0102a6596dc11c9c83cb11758196dd9",
+    "/assets/logo-small-with-title.svg": "bf25c384a03a6451543bd3e2c3dc610927bacfad",
+    "/assets/logo-very-light.svg": "1399aa13c3a90f1e14a17019aa23428603bb3b0b",
+    "/assets/logo-with-title-light.svg": "6bcf69a4b88e69ee6dfab0fbf887380d9af3a079",
+    "/assets/logo-with-title-very-light..svg": "28a7a764d20e46cfde114d0b31d2b9add5c036cd",
+    "/assets/logo-with-title.svg": "1a106269cc6e5fd431a83368dd63b8a62ebcdc58",
+    "/assets/logo.svg": "67435c5607292dfe6a5bfbf04a2f99d4bf7051d0",
+    "/assets/metamask-fox.svg": "7c97da073d6945fc99a644d835c1948cb2f41219",
+    "/index.html": "6d7e9a416c0d1c9a7affc5fab5a9f7f6475cb98f",
+    "/main.96b991fb529243ee5409.js": "f245ae1d5aee5b609c7eff43080055c0df02689c",
+    "/polyfills-es5.23652b7609e10bc79e16.js": "6aca6a9b82124211e9addf9466c4040a41a98a3e",
+    "/polyfills.46985849887403b67e3d.js": "a9fd92bba4b182c8f2d6195059c0860dbb5cc0c4",
+    "/runtime.d8796841034d661d71f0.js": "84e8462dc519544c6c69e06feb92ce3073f52ca8",
+    "/styles.c0544b5bf86060629ff1.css": "0ecebd956242150e7cb9244b42e2e0b5820bd75f"
+  },
+  "navigationUrls": [
+    {
+      "positive": true,
+      "regex": "^\\/.*$"
+    },
+    {
+      "positive": false,
+      "regex": "^\\/(?:.+\\/)?[^/]*\\.[^/]*$"
+    },
+    {
+      "positive": false,
+      "regex": "^\\/(?:.+\\/)?[^/]*__[^/]*$"
+    },
+    {
+      "positive": false,
+      "regex": "^\\/(?:.+\\/)?[^/]*__[^/]*\\/.*$"
+    }
+  ]
+}
