@@ -6,6 +6,7 @@ import Jazzicon from 'jazzicon';
 import Web3 from 'web3';
 import {Subject} from 'rxjs';
 
+declare let require: any;
 declare let web3: any;
 declare let ethereum: any;
 declare let window: any;
@@ -60,8 +61,12 @@ export class Web3Service {
     async disconnect() {
 
         if (this.thirdPartyProvider) {
+            console.log('thirdPartyProvider', this.thirdPartyProvider);
 
             switch (this.txProviderName) {
+                case 'torus':
+                    window.location.reload();
+                    break;
                 case 'metamask':
                 default:
 
@@ -85,6 +90,9 @@ export class Web3Service {
         await this.disconnect();
 
         switch (wallet) {
+            case 'torus':
+                await this.enableTorusTxProvider();
+                break;
             case 'metamask':
             default:
                 await this.enableWeb3TxProvider();
@@ -161,6 +169,41 @@ export class Web3Service {
         } catch (e) {
 
             alert(e);
+            console.error(e);
+            throw new Error(e);
+        }
+    }
+
+    async enableTorusTxProvider() {
+
+        try {
+
+            await (new Promise((resolve, reject) => {
+
+                const embed = require('@toruslabs/torus-embed');
+
+                window.addEventListener('message', async message => {
+
+                    if (
+                        typeof message.data.target !== 'undefined' &&
+                        message.data.target === 'embed_metamask' &&
+                        typeof message.data.data !== 'undefined' &&
+                        message.data.data.name === 'publicConfig'
+                    ) {
+
+                        window.ethereum.enable().then(async accounts => {
+
+                            this.txProviderName = 'torus';
+                            this.txProvider = new Web3(window.ethereum);
+                            this.thirdPartyProvider = window.ethereum;
+                            resolve();
+                        });
+                    }
+                });
+            }));
+
+        } catch (e) {
+
             console.error(e);
             throw new Error(e);
         }

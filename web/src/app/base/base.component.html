@@ -138,6 +138,11 @@
                             Web3
                         </span>
                     </div>
+
+                    <div *ngIf="web3Service.txProviderName === 'torus'">
+                        <img height="64" src="assets/torus.png"><br>
+                        Torus
+                    </div>
                 </button>
 
                 <br>
@@ -181,9 +186,16 @@
                     </button>
 
                 </div>
+
+                <div class="p-2 bd-highlight" *ngIf="web3Service.txProviderName !== 'torus'">
+
+                    <button (click)="connect('torus')" class="btn btn-default btn-wallet-connect">
+                        <img height="64" src="assets/torus.png"><br>
+                        Torus
+                    </button>
+
+                </div>
             </div>
-
-
         </div>
         <div *ngIf="connectInProgress" class="text-center pb-4 pt-3">
 
@@ -195,4 +207,4 @@
 
     </div>
 </ng-template>
-<app-notifications aria-live="polite" aria-atomic="true"></app-notifications>s
+<app-notifications aria-live="polite" aria-atomic="true"></app-notifications>
