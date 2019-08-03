@@ -1,5 +1,9 @@
 import {Injectable} from '@angular/core';
 import {TokenService} from '../token.service';
+import {ethers} from 'ethers';
+import {LendroidService} from './lendroid.service';
+import {CompoundService} from './compound.service';
+import {Web3Service} from '../web3.service';
 
 @Injectable({
     providedIn: 'root'
@@ -80,7 +84,10 @@ export class PoolsService {
     ];
 
     constructor(
-        private tokenService: TokenService
+        private tokenService: TokenService,
+        private lendroidService: LendroidService,
+        private compoundService: CompoundService,
+        private web3Service: Web3Service
     ) {
     }
 
@@ -90,20 +97,31 @@ export class PoolsService {
 
         for (const pool of this.pools) {
 
-            console.log('token', token);
-
             result.push({
                 name: pool.name,
                 title: pool.title,
                 icon: pool.icon,
                 token: this.tokenService.tokens[token].symbol,
                 interest: 0,
-                balance: 0,
+                balance: this.tokenService.formatAsset(token, await this.getBalanceOf(pool.name, token)),
                 lightThemeIconInvert: pool.lightThemeIconInvert,
                 darkThemeIconInvert: pool.darkThemeIconInvert
             });
         }
 
         return result;
+    }
+
+    async getBalanceOf(pool: string, token: string) {
+
+        switch (pool) {
+            case 'compound-v2':
+
+                return this.compoundService.getBalance(token, this.web3Service.walletAddress);
+                break;
+            default:
+                return ethers.utils.bigNumberify(0);
+                break;
+        }
     }
 }

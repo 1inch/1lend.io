@@ -2,7 +2,10 @@ import { Injectable } from '@angular/core';
 import { PoolInterface } from './pool.interface';
 import { BigNumber } from 'ethers/utils';
 import { TokenService } from '../token.service';
+import {Web3Service} from '../web3.service';
+import {ethers} from 'ethers';
 
+declare let require: any;
 const CERC20_ABI = require('../abi/CERC20.json');
 
 @Injectable({
@@ -11,8 +14,8 @@ const CERC20_ABI = require('../abi/CERC20.json');
 export class CompoundService implements PoolInterface {
 
     constructor(
-        tokenService: TokenService,
-        web3Service: Web3Service
+        protected tokenService: TokenService,
+        protected web3Service: Web3Service
     ) { }
 
     getBalance(tokenSymbol: string, walletAddress: string): Promise<BigNumber> {
