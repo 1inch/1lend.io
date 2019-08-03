@@ -8,6 +8,7 @@ import {Web3Service} from '../web3.service';
 import {TokenService} from '../token.service';
 import {debounceTime, distinctUntilChanged, map, startWith} from 'rxjs/operators';
 import {ThemeService} from '../theme.service';
+import {PoolsService} from '../pools/pools.service';
 
 @Component({
     selector: 'app-lend',
@@ -24,32 +25,7 @@ export class LendComponent implements OnInit {
     error = false;
     transactionHash = '';
     tokens;
-    pools = [
-        {
-            name: 'Compound V2',
-            icon: 'compound-v2.svg',
-            token: 'DAI',
-            interest: 15.3,
-            balance: '10.000',
-            lightThemeIconInvert: false
-        },
-        {
-            name: 'Lendroid',
-            icon: 'lendroid.svg',
-            token: 'DAI',
-            interest: 10.12,
-            balance: '25.000',
-            lightThemeIconInvert: true
-        },
-        {
-            name: 'ETHLend',
-            icon: 'ethlend.png',
-            token: 'DAI',
-            interest: 13.12,
-            balance: '100.000',
-            lightThemeIconInvert: true
-        }
-    ];
+    pools = [];
 
     fromTokenAmount = '';
     fromToken = localStorage.getItem('fromToken') ? localStorage.getItem('fromToken') : 'ETH';
@@ -75,7 +51,8 @@ export class LendComponent implements OnInit {
     constructor(
         public tokenService: TokenService,
         public web3Service: Web3Service,
-        public themeService: ThemeService
+        public themeService: ThemeService,
+        public poolsService: PoolsService
     ) {
     }
 
@@ -375,6 +352,8 @@ export class LendComponent implements OnInit {
                 return;
             }
 
+            this.pools = [];
+
             this.dataLoading = true;
 
             const result = await this.onChangeBackgroundEvent(identifier, force);
@@ -401,6 +380,8 @@ export class LendComponent implements OnInit {
 
             return false;
         }
+
+        this.pools = await this.poolsService.getPools(this.fromToken);
 
         return true;
     }

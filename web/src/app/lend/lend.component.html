@@ -94,7 +94,7 @@
                 <table class="table">
                     <thead class="thead-light">
                     <tr>
-                        <th scope="col" style="vertical-align: middle;">Token</th>
+                        <!--                        <th scope="col" style="vertical-align: middle;">Token</th>-->
                         <th scope="col">Pool</th>
                         <th class="text-center" scope="col">Interest</th>
                         <th class="text-center" scope="col">Balance</th>
@@ -109,16 +109,17 @@
                         </td>
                     </tr>
                     <tr *ngFor="let pool of pools">
+                        <!--                        <td class="align-middle">-->
+                        <!--                            <img [src]="'assets/tokens/asset_' + tokens[pool.token].symbol + '.svg'"-->
+                        <!--                                 style="width: 32px">-->
+                        <!--                            {{tokens[pool.token].symbol}}-->
+                        <!--                        </td>-->
                         <td class="align-middle">
-                            <img [src]="'assets/tokens/asset_' + tokens[pool.token].symbol + '.svg'"
-                                 style="width: 32px">
-                            {{tokens[pool.token].symbol}}
-                        </td>
-                        <td class="align-middle">
-                            <img [class]="!themeService.isDarkMode && pool.lightThemeIconInvert ? 'invert-image' : ''" [src]="'assets/pools/' + pool.icon"
+                            <img [class]="(!themeService.isDarkMode && pool.lightThemeIconInvert) || (themeService.isDarkMode && pool.darkThemeIconInvert) ? 'invert-image' : ''"
+                                 [src]="'assets/pools/' + pool.icon"
                                  class="mr-1"
                                  style="width: 32px">
-                            {{pool.name}}
+                            {{pool.title}}
                         </td>
                         <td class="text-center">
                             {{pool.interest}}
@@ -127,8 +128,9 @@
                             {{pool.balance}}
                         </td>
                         <td class="text-right">
-                            <button class="btn btn-sm btn-success mr-1">Deposit</button>
-                            <button [disabled]="pool.balance === '0'" class="btn btn-sm btn-danger">Withdraw</button>
+                            <button class="btn btn-sx btn-success mt-1">Deposit</button>
+                            <button [disabled]="pool.balance === '0'" class="btn btn-sm btn-danger ml-1 mt-1">Withdraw
+                            </button>
                         </td>
                     </tr>
                     </tbody>
