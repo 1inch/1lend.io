@@ -143,19 +143,13 @@ export class PoolsService {
         switch (pool) {
             case 'compound-v2':
 
-                return this.tokenService.formatAsset(
-                    'c' + token,
-                    await this.compoundService.getBalance(token, this.web3Service.walletAddress)
-                );
+                return await this.compoundService.getFormatedBalance(token, this.web3Service.walletAddress);
                 break;
             case 'uniswap':
 
-                return this.tokenService.formatAsset(
+                return await this.uniswapService.getFormatedTokensBalance(
                     token,
-                    await this.uniswapService.getBalance(
-                        this.tokenService.tokens[token].address,
-                        this.web3Service.walletAddress
-                    )
+                    this.web3Service.walletAddress
                 );
                 break;
             default:

@@ -1,0 +1,37 @@
+[
+    {
+        "name": "removeLiquidity",
+        "outputs": [
+            {
+                "type": "uint256",
+                "name": "out"
+            },
+            {
+                "type": "uint256",
+                "name": "out"
+            }
+        ],
+        "inputs": [
+            {
+                "type": "uint256",
+                "name": "amount"
+            },
+            {
+                "type": "uint256",
+                "name": "min_eth"
+            },
+            {
+                "type": "uint256",
+                "name": "min_tokens"
+            },
+            {
+                "type": "uint256",
+                "name": "deadline"
+            }
+        ],
+        "constant": true,
+        "payable": false,
+        "type": "function",
+        "stateMutability": "view"
+    }
+]
