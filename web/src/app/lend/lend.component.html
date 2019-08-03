@@ -149,7 +149,7 @@
                                 <button class="btn btn-sm btn-warning mt-1" *ngIf="!pool.approved">
                                     Approve {{pool.token}}
                                 </button>
-                                <button [disabled]="pool.balance === '0'" class="btn btn-sm btn-danger ml-1 mt-1">
+                                <button [disabled]="pool.balance == 0" class="btn btn-sm btn-danger ml-1 mt-1">
                                     Withdraw
                                 </button>
                             </div>

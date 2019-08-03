@@ -141,21 +141,27 @@ export class PoolsService {
             return ethers.utils.bigNumberify(0);
         }
 
-        switch (pool) {
-            case 'compound-v2':
+        try {
 
-                return await this.compoundService.getFormatedBalance(token, this.web3Service.walletAddress);
-                break;
-            case 'uniswap':
+            switch (pool) {
+                case 'compound-v2':
 
-                return await this.uniswapService.getFormatedTokensBalance(
-                    token,
-                    this.web3Service.walletAddress
-                );
-                break;
-            default:
-                return ethers.utils.bigNumberify(0);
-                break;
+                    return await this.compoundService.getFormatedBalance(token, this.web3Service.walletAddress);
+                    break;
+                case 'uniswap':
+
+                    return await this.uniswapService.getFormatedTokensBalance(
+                        token,
+                        this.web3Service.walletAddress
+                    );
+                    break;
+                default:
+                    return ethers.utils.bigNumberify(0);
+                    break;
+            }
+        } catch (e) {
+
+            return ethers.utils.bigNumberify(0);
         }
     }
 
