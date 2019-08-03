@@ -284,7 +284,7 @@ export class LendComponent implements OnInit {
             this.fromTokenAmountControl.setValue(this.fromTokenBalance);
         }
 
-        this.dataLoading = false;
+        // this.dataLoading = false;
 
         this.onChange();
     }
