@@ -1452,8 +1452,13 @@ export class TokenService {
 
     async getTokenBalance(symbol: string, address: string) {
 
+        return this.getTokenBalanceByAddress(this.tokens[symbol].address, address);
+    }
+
+    async getTokenBalanceByAddress(tokenAddress: string, address: string) {
+
         const contract = new ethers.Contract(
-            this.tokens[symbol].address,
+            tokenAddress,
             ERC20ABI,
             this.web3Service.provider
         );
