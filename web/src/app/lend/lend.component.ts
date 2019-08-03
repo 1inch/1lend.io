@@ -273,7 +273,10 @@ export class LendComponent implements OnInit {
 
         if (this.fromTokenBalance === '0.0') {
 
-            this.fromTokenAmountControl.setValue('1.0');
+            if (this.fromTokenAmount === '0.0') {
+
+                this.fromTokenAmountControl.setValue('1.0');
+            }
         } else {
 
             this.fromTokenAmountControl.setValue(this.fromTokenBalance);
@@ -360,7 +363,7 @@ export class LendComponent implements OnInit {
 
             const result = await this.onChangeBackgroundEvent(identifier, force);
 
-            if (!result) {
+            if (!result || this.getRequestIdentifier() !== identifier) {
 
                 return false;
             }
@@ -383,7 +386,25 @@ export class LendComponent implements OnInit {
             return false;
         }
 
-        this.pools = await this.poolsService.getPools(this.fromToken);
+        if (this.getRequestIdentifier() !== identifier) {
+
+            return false;
+        }
+
+        const pools = await this.poolsService.getPools(
+            this.fromToken,
+            this.tokenService.parseAsset(
+                this.fromToken,
+                this.fromTokenAmount
+            )
+        );
+
+        if (this.getRequestIdentifier() !== identifier) {
+
+            return false;
+        }
+
+        this.pools = pools;
 
         return true;
     }
@@ -401,11 +422,7 @@ export class LendComponent implements OnInit {
         )
             .subscribe(async (identifier) => {
 
-                this.dataLoading = true;
-
                 await this.onChangeEvent(identifier);
-
-                this.dataLoading = false;
             });
     }
 }

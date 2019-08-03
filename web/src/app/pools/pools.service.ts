@@ -4,6 +4,7 @@ import {ethers} from 'ethers';
 import {LendroidService} from './lendroid.service';
 import {CompoundService} from './compound.service';
 import {Web3Service} from '../web3.service';
+import {BigNumber} from 'ethers/utils';
 
 @Injectable({
     providedIn: 'root'
@@ -100,7 +101,7 @@ export class PoolsService {
     ) {
     }
 
-    async getPools(token: string) {
+    async getPools(token: string, amount: BigNumber) {
 
         const result = [];
 
@@ -115,6 +116,7 @@ export class PoolsService {
                     token: this.tokenService.tokens[token].symbol,
                     interest: await this.getInterestOf(pool.name, token),
                     balance: await this.getBalanceOf(pool.name, token),
+                    slippage: await this.getSlippageOf(pool.name, token, amount),
                     lightThemeIconInvert: pool.lightThemeIconInvert,
                     darkThemeIconInvert: pool.darkThemeIconInvert,
                     type: pool.type
@@ -155,6 +157,19 @@ export class PoolsService {
             case 'compound-v2':
 
                 return this.compoundService.interest('c' + token);
+                break;
+            default:
+                return ethers.utils.bigNumberify(0);
+                break;
+        }
+    }
+
+    async getSlippageOf(pool: string, token: string, amount: BigNumber) {
+
+        switch (pool) {
+            case 'compound-v2':
+
+                return this.compoundService.slippage('c' + token, amount);
                 break;
             default:
                 return ethers.utils.bigNumberify(0);
