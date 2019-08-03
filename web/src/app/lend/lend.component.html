@@ -115,11 +115,18 @@
                         <!--                            {{tokens[pool.token].symbol}}-->
                         <!--                        </td>-->
                         <td class="align-middle">
-                            <img [class]="(!themeService.isDarkMode && pool.lightThemeIconInvert) || (themeService.isDarkMode && pool.darkThemeIconInvert) ? 'invert-image' : ''"
-                                 [src]="'assets/pools/' + pool.icon"
-                                 class="mr-1"
-                                 style="width: 32px">
+                            <img
+                                [class]="(!themeService.isDarkMode && pool.lightThemeIconInvert) || (themeService.isDarkMode && pool.darkThemeIconInvert) ? 'invert-image' : ''"
+                                [src]="'assets/pools/' + pool.icon"
+                                class="mr-1"
+                                style="width: 32px">
                             {{pool.title}}
+                            <span *ngIf="pool.type == 'double' && fromToken !== 'ETH'">
+                                <img [src]="'assets/tokens/asset_ETH.svg'"
+                                     style="width: 24px">
+                                <img [src]="'assets/tokens/asset_' + tokens[pool.token].symbol + '.svg'"
+                                     style="width: 24px; margin-left: -8px;">
+                            </span>
                         </td>
                         <td class="text-center align-middle">
                             {{toFixed(pool.interest, 2)}}%

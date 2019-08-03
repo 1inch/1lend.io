@@ -16,35 +16,40 @@ export class PoolsService {
             title: 'Lendroid',
             icon: 'lendroid.svg',
             lightThemeIconInvert: true,
-            darkThemeIconInvert: false
+            darkThemeIconInvert: false,
+            type: 'single'
         },
         {
             name: 'ethLend',
             title: 'ETHLend',
             icon: 'ethlend.png',
             lightThemeIconInvert: true,
-            darkThemeIconInvert: false
+            darkThemeIconInvert: false,
+            type: 'single'
         },
         {
             name: 'kyber',
             title: 'Kyber Network',
             icon: 'kyber-network.png',
             lightThemeIconInvert: true,
-            darkThemeIconInvert: false
+            darkThemeIconInvert: false,
+            type: 'double'
         },
         {
             name: 'bancor',
             title: 'Bancor Network',
             icon: 'bancor-network.png',
             lightThemeIconInvert: true,
-            darkThemeIconInvert: true
+            darkThemeIconInvert: true,
+            type: 'double'
         },
         {
             name: 'uniswap',
             title: 'Uniswap',
             icon: 'uniswap.png',
             lightThemeIconInvert: true,
-            darkThemeIconInvert: false
+            darkThemeIconInvert: false,
+            type: 'double'
         },
         // {
         //     name: 'compound-v1',
@@ -58,28 +63,32 @@ export class PoolsService {
             title: 'Compound V2',
             icon: 'compound-v2.svg',
             lightThemeIconInvert: false,
-            darkThemeIconInvert: false
+            darkThemeIconInvert: false,
+            type: 'single'
         },
         {
             name: 'dharma',
             title: 'Dharma',
             icon: 'dharma.svg',
             lightThemeIconInvert: false,
-            darkThemeIconInvert: true
+            darkThemeIconInvert: true,
+            type: 'single'
         },
         {
             name: 'nuo',
             title: 'Nuo',
             icon: 'nuo.svg',
             lightThemeIconInvert: false,
-            darkThemeIconInvert: false
+            darkThemeIconInvert: false,
+            type: 'single'
         },
         {
             name: 'fulcrum',
             title: 'Fulcrum',
             icon: 'fulcrum.svg',
             lightThemeIconInvert: false,
-            darkThemeIconInvert: false
+            darkThemeIconInvert: false,
+            type: 'single'
         }
     ];
 
@@ -97,22 +106,34 @@ export class PoolsService {
 
         for (const pool of this.pools) {
 
-            result.push({
-                name: pool.name,
-                title: pool.title,
-                icon: pool.icon,
-                token: this.tokenService.tokens[token].symbol,
-                interest: await this.getInterestOf(pool.name, token),
-                balance: await this.getBalanceOf(pool.name, token),
-                lightThemeIconInvert: pool.lightThemeIconInvert,
-                darkThemeIconInvert: pool.darkThemeIconInvert
-            });
+            try {
+
+                result.push({
+                    name: pool.name,
+                    title: pool.title,
+                    icon: pool.icon,
+                    token: this.tokenService.tokens[token].symbol,
+                    interest: await this.getInterestOf(pool.name, token),
+                    balance: await this.getBalanceOf(pool.name, token),
+                    lightThemeIconInvert: pool.lightThemeIconInvert,
+                    darkThemeIconInvert: pool.darkThemeIconInvert,
+                    type: pool.type
+                });
+
+            } catch (e) {
+
+            }
         }
 
         return result;
     }
 
     async getBalanceOf(pool: string, token: string) {
+
+        if (!this.web3Service.walletAddress) {
+
+            return ethers.utils.bigNumberify(0);
+        }
 
         switch (pool) {
             case 'compound-v2':
