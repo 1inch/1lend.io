@@ -103,7 +103,7 @@ export class PoolsService {
                 icon: pool.icon,
                 token: this.tokenService.tokens[token].symbol,
                 interest: await this.getInterestOf(pool.name, token),
-                balance: this.tokenService.formatAsset(token, await this.getBalanceOf(pool.name, token)),
+                balance: await this.getBalanceOf(pool.name, token),
                 lightThemeIconInvert: pool.lightThemeIconInvert,
                 darkThemeIconInvert: pool.darkThemeIconInvert
             });
@@ -117,7 +117,10 @@ export class PoolsService {
         switch (pool) {
             case 'compound-v2':
 
-                return this.compoundService.getBalance('c' + token, this.web3Service.walletAddress);
+                return this.tokenService.formatAsset(
+                    'c' + token,
+                    await this.compoundService.getBalance('c' + token, this.web3Service.walletAddress)
+                );
                 break;
             default:
                 return ethers.utils.bigNumberify(0);
