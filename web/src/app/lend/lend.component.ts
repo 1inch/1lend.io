@@ -23,6 +23,7 @@ export class LendComponent implements OnInit {
     error = false;
     transactionHash = '';
     tokens;
+    pools = [];
 
     fromTokenAmount = '';
     fromToken = localStorage.getItem('fromToken') ? localStorage.getItem('fromToken') : 'ETH';

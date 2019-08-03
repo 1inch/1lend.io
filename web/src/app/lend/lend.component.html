@@ -24,7 +24,7 @@
                     problem.
                 </ngb-alert>
 
-                <form #f="ngForm" class="pt-4" novalidate>
+                <form #f="ngForm" class="pt-4 mb-4" novalidate>
                     <div class="form-row justify-content-md-center">
                         <div class="form-group col-md-6">
                             <small (click)="setFromTokenAmount()"
@@ -91,6 +91,24 @@
                         </div>
                     </div>
                 </form>
+
+                <table class="table">
+                    <thead class="thead-light">
+                    <tr>
+                        <th scope="col" style="width: 30%; vertical-align: middle;">Token</th>
+                        <th class="text-center" scope="col">Pool</th>
+                        <th class="text-center" scope="col" style="width: 25%; vertical-align: middle;">Interest</th>
+                        <th class="text-center" scope="col" style="width: 25%; vertical-align: middle;">Action</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr *ngIf="!pools.length && dataLoading">
+                        <td class="align-middle text-center p-3" colspan="4">
+                            <img alt="Loading..." class="loading-spinner" style="opacity: 0.1;" width="150" src="assets/loading.svg">
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>
