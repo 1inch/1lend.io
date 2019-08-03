@@ -7,7 +7,7 @@ import {HttpClient} from '@angular/common/http';
 })
 export class ConfigurationService {
 
-    public AGGREGATED_LEND_ENS = '1lend.eth';
+    public AGGREGATED_LEND_ENS = 'onelend.eth';
     public INFURA_KEY = '8b719297739c4cf19209f1377aa1e83c';
 
     public GAS_PRICE_URL = 'https://gasprice.poa.network';

@@ -47,9 +47,9 @@
                                         id="fromTokenDropdown" ngbDropdownToggle
                                         type="button">
                                         <span>
-                                            <img [src]="'assets/tokens/' + tokens[fromToken].address.toLowerCase() + '.png'"
+                                            <img [src]="'assets/tokens/asset_' + tokens[fromToken].symbol + '.svg'"
                                                  class="mr-1"
-                                                 onerror="this.src = 'assets/tokens/token.png';" style="width: 24px">
+                                                style="width: 24px">
 
                                             {{fromToken}}
                                         </span>
@@ -72,9 +72,8 @@
                                                     *ngFor="let token of fromTokenSearchResults | async"
                                                     class="list-group-item">
                                                     <img
-                                                        [src]="'assets/tokens/' + token.address.toLowerCase() + '.png'"
+                                                        [src]="'assets/tokens/asset_' + token.symbol + '.svg'"
                                                         class="mr-1"
-                                                        onerror="this.src = 'assets/tokens/token.png';"
                                                         style="width: 16px">
 
                                                     {{token.symbol}}
@@ -95,16 +94,38 @@
                 <table class="table">
                     <thead class="thead-light">
                     <tr>
-                        <th scope="col" style="width: 30%; vertical-align: middle;">Token</th>
-                        <th class="text-center" scope="col">Pool</th>
-                        <th class="text-center" scope="col" style="width: 25%; vertical-align: middle;">Interest</th>
-                        <th class="text-center" scope="col" style="width: 25%; vertical-align: middle;">Action</th>
+                        <th scope="col" style="vertical-align: middle;">Token</th>
+                        <th scope="col">Pool</th>
+                        <th class="text-center" scope="col">Interest</th>
+                        <th class="text-center" scope="col">Balance</th>
+                        <th class="text-center" scope="col">Action</th>
                     </tr>
                     </thead>
                     <tbody>
                     <tr *ngIf="!pools.length && dataLoading">
                         <td class="align-middle text-center p-3" colspan="4">
                             <img alt="Loading..." class="loading-spinner" style="opacity: 0.1;" width="150" src="assets/loading.svg">
+                        </td>
+                    </tr>
+                    <tr *ngFor="let pool of pools">
+                        <td class="align-middle">
+                            <img [src]="'assets/tokens/asset_' + tokens[pool.token].symbol + '.svg'"
+                                 style="width: 32px">
+                            {{tokens[pool.token].symbol}}
+                        </td>
+                        <td class="align-middle">
+                            <img [src]="'assets/pools/' + pool.icon" class="mr-1" style="width: 32px">
+                            {{pool.name}}
+                        </td>
+                        <td class="text-center">
+                            {{pool.interest}}
+                        </td>
+                        <td class="text-center">
+                            {{pool.balance}}
+                        </td>
+                        <td class="text-right">
+                            <button class="btn btn-sm btn-success mr-1">Deposit</button>
+                            <button class="btn btn-sm btn-danger" [disabled]="pool.balance === '0'">Withdraw</button>
                         </td>
                     </tr>
                     </tbody>

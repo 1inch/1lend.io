@@ -23,7 +23,29 @@ export class LendComponent implements OnInit {
     error = false;
     transactionHash = '';
     tokens;
-    pools = [];
+    pools = [
+        {
+            name: 'Compound V2',
+            icon: 'compound-v2.svg',
+            token: 'DAI',
+            interest: 15.3,
+            balance: '10.000'
+        },
+        {
+            name: 'Lendroid',
+            icon: 'lendroid.svg',
+            token: 'DAI',
+            interest: 10.12,
+            balance: '25.000'
+        },
+        {
+            name: 'ETHLend',
+            icon: 'ethlend.png',
+            token: 'DAI',
+            interest: 13.12,
+            balance: '100.000'
+        }
+    ];
 
     fromTokenAmount = '';
     fromToken = localStorage.getItem('fromToken') ? localStorage.getItem('fromToken') : 'ETH';
@@ -240,14 +262,7 @@ export class LendComponent implements OnInit {
 
     async refresh() {
 
-        this.dataLoading = true;
-
-        this.onChangeEvent(this.getRequestIdentifier());
-
-        setTimeout(() => {
-
-            this.dataLoading = false;
-        }, 3000);
+        this.onChangeEvent(this.getRequestIdentifier(), true);
     }
 
     async setFromToken(token) {
@@ -266,9 +281,9 @@ export class LendComponent implements OnInit {
 
         this.dataLoading = true;
 
-        this.fromTokenAmountControl.setValue('0.0');
-        this.fromTokenBalance = '0.0';
-        this.fromTokenBalanceBN = ethers.utils.bigNumberify(0);
+        // this.fromTokenAmountControl.setValue('0.0');
+        // this.fromTokenBalance = '0.0';
+        // this.fromTokenBalanceBN = ethers.utils.bigNumberify(0);
 
         await this.loadTokenBalance();
 
@@ -338,9 +353,9 @@ export class LendComponent implements OnInit {
         );
     }
 
-    async onChangeEvent(identifier) {
+    async onChangeEvent(identifier, force = false) {
 
-        if (this.getRequestIdentifier() !== identifier) {
+        if (!force && this.getRequestIdentifier() !== identifier) {
 
             return false;
         }
@@ -357,7 +372,7 @@ export class LendComponent implements OnInit {
 
             this.dataLoading = true;
 
-            const result = await this.onChangeBackgroundEvent(identifier);
+            const result = await this.onChangeBackgroundEvent(identifier, force);
 
             if (!result) {
 
@@ -372,7 +387,7 @@ export class LendComponent implements OnInit {
         this.dataLoading = false;
     }
 
-    async onChangeBackgroundEvent(identifier) {
+    async onChangeBackgroundEvent(identifier, force = false) {
 
         if (
             !this.fromTokenAmount ||
