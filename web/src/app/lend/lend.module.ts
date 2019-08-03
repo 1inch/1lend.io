@@ -6,6 +6,7 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {CollapseModule, TooltipModule} from 'ngx-bootstrap';
 import {LendRoutingModule} from './lend-routing.module';
+import {LoadingSpinnerModule} from '../loading-spinner/loading-spinner.module';
 
 @NgModule({
     declarations: [LendComponent],
@@ -19,6 +20,7 @@ import {LendRoutingModule} from './lend-routing.module';
         ReactiveFormsModule,
         TooltipModule.forRoot(),
         CollapseModule.forRoot(),
+        LoadingSpinnerModule,
     ]
 })
 export class LendModule {

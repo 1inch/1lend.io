@@ -1,15 +1,34 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
+import {faSyncAlt} from '@fortawesome/free-solid-svg-icons/faSyncAlt';
 
 @Component({
-  selector: 'app-lend',
-  templateUrl: './lend.component.html',
-  styleUrls: ['./lend.component.scss']
+    selector: 'app-lend',
+    templateUrl: './lend.component.html',
+    styleUrls: ['./lend.component.scss']
 })
 export class LendComponent implements OnInit {
 
-  constructor() { }
+    loading = true;
+    refreshIcon = faSyncAlt;
 
-  ngOnInit() {
-  }
+    constructor() {
+    }
 
+    ngOnInit() {
+
+        setTimeout(() => {
+
+            this.loading = false;
+        }, 3000);
+    }
+
+    async refresh() {
+
+        this.loading = true;
+
+        setTimeout(() => {
+
+            this.loading = false;
+        }, 3000);
+    }
 }
