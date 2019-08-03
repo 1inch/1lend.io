@@ -16,6 +16,7 @@ export class ConfigurationService {
     public TOKEN_AGGREGATOR_SMART_CONTRACT_ADDRESS = ethers.utils.getAddress('0x9f436186FAa769eA776D793c084dC1B66F593164');
 
     public UNISWAP_FACTORY_CONTRACT_ADDRESS = '0xc0a47dFe034B400B47bDaD5FecDa2621de6c4d95';
+    public KYBER_NETWORK_PROXY_CONTRACT_ADDRESS = '0x818E6FECD516Ecc3849DAf6845e3EC868087B755';
 
     public fastGasPrice;
     public standardGasPrice;

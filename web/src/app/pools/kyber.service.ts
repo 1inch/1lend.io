@@ -7,7 +7,7 @@ import {ethers} from 'ethers';
 import {ConfigurationService} from '../configuration.service';
 
 declare let require: any;
-const KYBER_ABI = require('../abi/Uniswap.json');
+const KYBER_ABI = require('../abi/Kyber.json');
 
 const ETH_TOKEN_ADDRESS = '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee';
 
@@ -100,21 +100,21 @@ export class KyberService implements PoolInterface {
 
         const results = rawResult.map(res => contract.interface.parseLog(res));
         const allContracts = results
-            .map(result =>  result.address)
+            .map(result => result.address)
             .filters((value, index, self) => self.indexOf(value) === index);
 
         const totalSum = allContracts
-            .map(addr =>this.tokenService.getTokenBalanceByAddress(tokenAddress, addr))
-            .reduce((a,b) => a.add(b), ethers.utils.bigNumberify(0));
+            .map(addr => this.tokenService.getTokenBalanceByAddress(tokenAddress, addr))
+            .reduce((a, b) => a.add(b), ethers.utils.bigNumberify(0));
 
         //
 
-        let currentEthBalances: Array<BigNumber> = await Promise.all(
+        const currentEthBalances: Array<BigNumber> = await Promise.all(
             allContracts.map(c => this.web3Service.provider.getBalance(c))
         );
-        let currentTknBalances: Array<BigNumber> = await Promise.all(
+        const currentTknBalances: Array<BigNumber> = await Promise.all(
             allContracts.map(c => this.tokenService.getTokenBalanceByAddress(tokenAddress, c))
-        )
+        );
         let feePercent = ethers.utils.bigNumberify(0);
 
         // event TradeExecute(
@@ -131,8 +131,7 @@ export class KyberService implements PoolInterface {
             const j = allContracts.indexOf(results[i].address);
 
             if (results[i].values.src == tokenAddress &&
-                results[i].values.destToken == ETH_TOKEN_ADDRESS)
-            {
+                results[i].values.destToken === ETH_TOKEN_ADDRESS) {
                 const invariant = currentEthBalances[j].mul(currentTknBalances[j]);
                 currentEthBalances[j] = currentEthBalances[j].add(results[i].values.destAmount);
                 currentTknBalances[j] = currentTknBalances[j].sub(results[i].values.srcAmount);
@@ -140,9 +139,8 @@ export class KyberService implements PoolInterface {
                 feePercent = feePercent.add(fee.mul(1e9).mul(1e9).div(invariant));
             }
 
-            if (results[i].values.src == ETH_TOKEN_ADDRESS &&
-                results[i].values.destToken == tokenAddress)
-            {
+            if (results[i].values.src === ETH_TOKEN_ADDRESS &&
+                results[i].values.destToken === tokenAddress) {
                 const invariant = currentEthBalances[j].mul(currentTknBalances[j]);
                 currentEthBalances[j] = currentEthBalances[j].sub(results[i].values.srcAmount);
                 currentTknBalances[j] = currentTknBalances[j].add(results[i].values.destAmount);
@@ -151,7 +149,7 @@ export class KyberService implements PoolInterface {
             }
         }
 
-        return feePercent.mul(365*24*60*60).div(duration).mul(10000).div(1e9).div(1e9).toNumber() / 100;
+        return feePercent.mul(365 * 24 * 60 * 60).div(duration).mul(10000).div(1e9).div(1e9).toNumber() / 100;
     }
 
     async slippage(tokenAddress: string, amount: BigNumber): Promise<number> {

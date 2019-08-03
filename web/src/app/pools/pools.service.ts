@@ -6,6 +6,8 @@ import {CompoundService} from './compound.service';
 import {Web3Service} from '../web3.service';
 import {BigNumber} from 'ethers/utils';
 import {UniswapService} from './uniswap.service';
+import {KyberService} from './kyber.service';
+import {ConfigurationService} from '../configuration.service';
 
 @Injectable({
     providedIn: 'root'
@@ -99,7 +101,9 @@ export class PoolsService {
         private lendroidService: LendroidService,
         private compoundService: CompoundService,
         private uniswapService: UniswapService,
-        private web3Service: Web3Service
+        private kyberService: KyberService,
+        private web3Service: Web3Service,
+        private configurationService: ConfigurationService
     ) {
     }
 
@@ -179,6 +183,13 @@ export class PoolsService {
                 );
 
                 break;
+                case 'kyber':
+
+                return this.kyberService.interest(
+                    this.tokenService.tokens[token].address
+                );
+
+                break;
             default:
                 return ethers.utils.bigNumberify(0);
                 break;
@@ -200,6 +211,14 @@ export class PoolsService {
                     return this.tokenService.isApproved(
                         token,
                         await this.uniswapService.getExchangeAddress(this.tokenService.tokens[token].address)
+                    );
+
+                    break;
+                case 'kyber':
+
+                    return this.tokenService.isApproved(
+                        token,
+                        this.configurationService.KYBER_NETWORK_PROXY_CONTRACT_ADDRESS
                     );
 
                     break;
@@ -226,6 +245,14 @@ export class PoolsService {
                     );
 
                     break;
+                case 'kyber':
+
+                    return this.tokenService.approveToken(
+                        token,
+                        this.configurationService.KYBER_NETWORK_PROXY_CONTRACT_ADDRESS
+                    );
+
+                    break;
                 default:
                     return false;
                     break;
@@ -246,6 +273,14 @@ export class PoolsService {
             case 'uniswap':
 
                 return this.uniswapService.slippage(
+                    this.tokenService.tokens[token].address,
+                    amount
+                );
+
+                break;
+            case 'kyber':
+
+                return this.kyberService.slippage(
                     this.tokenService.tokens[token].address,
                     amount
                 );
