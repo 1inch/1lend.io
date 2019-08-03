@@ -187,6 +187,11 @@ export class PoolsService {
 
     async isApproved(pool: string, token: string) {
 
+        if (token === 'ETH') {
+
+            return true;
+        }
+
         if (this.web3Service.walletAddress) {
 
             switch (pool) {
