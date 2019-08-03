@@ -82,9 +82,16 @@
 
     <div class="ml-auto mr-auto">
         <a class="navbar-brand" routerLink="/">
-            <img *ngIf="!themeService.isDarkMode" alt="1lend.io" height="70" src="assets/logo-small-with-title.svg">
-            <img *ngIf="themeService.isDarkMode" alt="1lend.io" height="70"
-                 src="assets/logo-small-with-title-very-light.svg">
+            <span class="d-none d-md-inline">
+                <img *ngIf="!themeService.isDarkMode" alt="1lend.io" height="70" src="assets/logo-small-with-title.svg">
+                <img *ngIf="themeService.isDarkMode" alt="1lend.io" height="70"
+                     src="assets/logo-small-with-title-very-light.svg">
+            </span>
+            <span class="d-md-none">
+                <img *ngIf="!themeService.isDarkMode" alt="1lend.io" height="70" src="assets/logo.svg">
+                <img *ngIf="themeService.isDarkMode" alt="1lend.io" height="70"
+                     src="assets/logo-very-light.svg">
+            </span>
         </a>
     </div>
 
