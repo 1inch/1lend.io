@@ -275,7 +275,7 @@ export class Web3Service {
 
         try {
 
-            const portis = new Portis('4775c8d9-e6fe-4cdf-8c54-2f199d73b62a', 'mainnet');
+            const portis = new Portis('8ca71f4c-fbd6-45d6-bb64-b88d607c815c', 'mainnet');
 
             this.txProvider = new Web3(
                 portis.provider
