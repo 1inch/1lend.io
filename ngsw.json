@@ -1,6 +1,6 @@
 {
   "configVersion": 1,
-  "timestamp": 1564783927939,
+  "timestamp": 1564813479374,
   "index": "/index.html",
   "assetGroups": [
     {
@@ -8,12 +8,12 @@
       "installMode": "prefetch",
       "updateMode": "prefetch",
       "urls": [
-        "/5.c48354f564f45baa8c2c.js",
+        "/5.d02bbcc9a01cda7bb48d.js",
         "/index.html",
-        "/main.d6d9fb40e5ea92846010.js",
-        "/polyfills-es5.6eea1a239d7d27f92cda.js",
-        "/polyfills.9e0986d4e2279bfc68d0.js",
-        "/runtime.d8796841034d661d71f0.js",
+        "/main.60508eee54a186e4c375.js",
+        "/polyfills-es5.2803ab528cd8c053fddf.js",
+        "/polyfills.f3bb8631eadc2f56be60.js",
+        "/runtime.f70704398cf2ae6478fa.js",
         "/styles.c0544b5bf86060629ff1.css"
       ],
       "patterns": []
@@ -24,6 +24,8 @@
       "updateMode": "prefetch",
       "urls": [
         "/assets/cryptomaniacs.png",
+        "/assets/ethereum-white.png",
+        "/assets/ethereum.png",
         "/assets/favicon/android-chrome-192x192.png",
         "/assets/favicon/android-chrome-512x512.png",
         "/assets/favicon/apple-touch-icon.png",
@@ -35,6 +37,7 @@
         "/assets/favicon/site.webmanifest",
         "/assets/fonts/sansation_regular-webfont.woff",
         "/assets/fonts/sansation_regular-webfont.woff2",
+        "/assets/fortmatic.png",
         "/assets/icons/icon-128x128.png",
         "/assets/icons/icon-144x144.png",
         "/assets/icons/icon-152x152.png",
@@ -54,15 +57,22 @@
         "/assets/logo-with-title.svg",
         "/assets/logo.svg",
         "/assets/metamask-fox.svg",
-        "/assets/torus.png"
+        "/assets/portis.png",
+        "/assets/portis.svg",
+        "/assets/squarelink.png",
+        "/assets/torus.png",
+        "/assets/trust-wallet.png",
+        "/assets/wallet-connect.png"
       ],
       "patterns": []
     }
   ],
   "dataGroups": [],
   "hashTable": {
-    "/5.c48354f564f45baa8c2c.js": "19793795f13190d490319afc3ffbd47011f80b4a",
+    "/5.d02bbcc9a01cda7bb48d.js": "19793795f13190d490319afc3ffbd47011f80b4a",
     "/assets/cryptomaniacs.png": "550cf4c6ce74f53a3d5f975f3a0b033bda6de8f8",
+    "/assets/ethereum-white.png": "5111f74787b6075ff8b7a17d6b1761d9ac3ae73d",
+    "/assets/ethereum.png": "18cde2f547f56bb9609823892395f971e02896be",
     "/assets/favicon/android-chrome-192x192.png": "f12babda8cb1cc8b4191701ea59daee65dc5dc39",
     "/assets/favicon/android-chrome-512x512.png": "7a2ad8aeb85ed8e462edcc53463fb85a3f8d20c6",
     "/assets/favicon/apple-touch-icon.png": "1ad83220bcdd4f59c7bf3bed5788eaec152eeb35",
@@ -74,6 +84,7 @@
     "/assets/favicon/site.webmanifest": "bc396efbe606e1790b8ef1482dacc410faab0e68",
     "/assets/fonts/sansation_regular-webfont.woff": "60c212933f26fa158a0bc07efb459633f9c7ffcf",
     "/assets/fonts/sansation_regular-webfont.woff2": "5eedd7b870b46ec02006dfd35062020ca4f88b93",
+    "/assets/fortmatic.png": "79032bc1381dd166307e1a192228d55977a624ed",
     "/assets/icons/icon-128x128.png": "c039474fba393a5a0a89220fa5c2950ad77530e6",
     "/assets/icons/icon-144x144.png": "2ce4bfed02d55d460cd57a9db4b893e212de7d59",
     "/assets/icons/icon-152x152.png": "f145569170cc2768d5c27ae66750702565db92fa",
@@ -93,12 +104,17 @@
     "/assets/logo-with-title.svg": "1a106269cc6e5fd431a83368dd63b8a62ebcdc58",
     "/assets/logo.svg": "67435c5607292dfe6a5bfbf04a2f99d4bf7051d0",
     "/assets/metamask-fox.svg": "7c97da073d6945fc99a644d835c1948cb2f41219",
-    "/assets/torus.png": "fa52b53b6dd69c6326b958e56c855bb52405c106",
-    "/index.html": "97f9fea4317a05a6e5cbdcea452a2c6d32dfaea1",
-    "/main.d6d9fb40e5ea92846010.js": "17a03c86349bfc02800ee408c771d6cc602ecba3",
-    "/polyfills-es5.6eea1a239d7d27f92cda.js": "d7b0c33a82127679e2c9860046cbc1bba15c3382",
-    "/polyfills.9e0986d4e2279bfc68d0.js": "edba9ae98eb597482d2040f0463530a10fefcf25",
-    "/runtime.d8796841034d661d71f0.js": "84e8462dc519544c6c69e06feb92ce3073f52ca8",
+    "/assets/portis.png": "d968f5751f7f0cc17524719dfa3035a4107166ad",
+    "/assets/portis.svg": "dc51e44205b4f3078bb194d68a5950a109804b04",
+    "/assets/squarelink.png": "d64459f5e27c80cd2a51be892cc2bd632308869d",
+    "/assets/torus.png": "eb1b00459792724a8ec1504e3abd494c55e30efb",
+    "/assets/trust-wallet.png": "7fcf5ba66868259c8ddb9526ff15999f62ec25c2",
+    "/assets/wallet-connect.png": "405a77eb97c6d08b2f1a6a793e128a607ea2e881",
+    "/index.html": "9f47cb9176e04a1b8c1f723bec1961834e895158",
+    "/main.60508eee54a186e4c375.js": "170bbdec8b8fad1f274b0c81a0f89e0f4c6b2c6f",
+    "/polyfills-es5.2803ab528cd8c053fddf.js": "d7b0c33a82127679e2c9860046cbc1bba15c3382",
+    "/polyfills.f3bb8631eadc2f56be60.js": "2fbea5ce7d5c44f5ecdafc877db8287d034374dc",
+    "/runtime.f70704398cf2ae6478fa.js": "840915c7e720e2c35b25d3f8b2bc6bf9a958e4b2",
     "/styles.c0544b5bf86060629ff1.css": "0ecebd956242150e7cb9244b42e2e0b5820bd75f"
   },
   "navigationUrls": [
