@@ -144,9 +144,21 @@
                             </div>
                         </td>
                         <td class="text-right align-middle">
-                            <button class="btn btn-sm btn-success mt-1">Deposit</button>
-                            <button [disabled]="pool.balance === '0'" class="btn btn-sm btn-danger ml-1 mt-1">Withdraw
-                            </button>
+                            <div *ngIf="web3Service.walletAddress">
+                                <button class="btn btn-sm btn-success mt-1" *ngIf="pool.approved">Deposit</button>
+                                <button class="btn btn-sm btn-warning mt-1" *ngIf="!pool.approved">
+                                    Approve {{pool.token}}
+                                </button>
+                                <button [disabled]="pool.balance === '0'" class="btn btn-sm btn-danger ml-1 mt-1">
+                                    Withdraw
+                                </button>
+                            </div>
+
+                            <div *ngIf="!web3Service.walletAddress" class="text-center">
+                                <button class="btn btn-sm btn-warning" (click)="connect()">
+                                    Connect
+                                </button>
+                            </div>
                         </td>
                     </tr>
                     </tbody>

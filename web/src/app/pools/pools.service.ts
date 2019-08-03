@@ -117,6 +117,7 @@ export class PoolsService {
                     icon: pool.icon,
                     token: this.tokenService.tokens[token].symbol,
                     interest: await this.getInterestOf(pool.name, token),
+                    approved: await this.isApproved(pool.name, token),
                     balance: await this.getBalanceOf(pool.name, token),
                     slippage: await this.getSlippageOf(pool.name, token, amount),
                     lightThemeIconInvert: pool.lightThemeIconInvert,
@@ -175,6 +176,29 @@ export class PoolsService {
             default:
                 return ethers.utils.bigNumberify(0);
                 break;
+        }
+    }
+
+    async isApproved(pool: string, token: string) {
+
+        if (this.web3Service.walletAddress) {
+
+            switch (pool) {
+                case 'uniswap':
+
+                    return this.tokenService.isApproved(
+                        token,
+                        await this.uniswapService.getExchangeAddress(this.tokenService.tokens[token].address)
+                    );
+
+                    break;
+                default:
+                    return false;
+                    break;
+            }
+        } else {
+
+            return false;
         }
     }
 

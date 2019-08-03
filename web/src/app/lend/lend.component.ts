@@ -9,6 +9,7 @@ import {TokenService} from '../token.service';
 import {debounceTime, distinctUntilChanged, map, startWith} from 'rxjs/operators';
 import {ThemeService} from '../theme.service';
 import {PoolsService} from '../pools/pools.service';
+import {ConnectService} from '../connect.service';
 
 @Component({
     selector: 'app-lend',
@@ -54,7 +55,8 @@ export class LendComponent implements OnInit {
         public tokenService: TokenService,
         public web3Service: Web3Service,
         public themeService: ThemeService,
-        public poolsService: PoolsService
+        public poolsService: PoolsService,
+        public connectService: ConnectService
     ) {
     }
 
@@ -338,6 +340,11 @@ export class LendComponent implements OnInit {
         this.changeEvent.next(
             this.getRequestIdentifier()
         );
+    }
+
+    connect() {
+
+        this.connectService.startConnectEvent.next();
     }
 
     async onChangeEvent(identifier, force = false) {

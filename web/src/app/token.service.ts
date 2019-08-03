@@ -1476,4 +1476,26 @@ export class TokenService {
             tokens
         );
     }
+
+    async isApproved(symbol: string, tokenSpender: string) {
+
+        const contract = new ethers.Contract(
+            this.tokens[symbol].address,
+            ERC20ABI,
+            this.web3Service.provider
+        );
+
+        if (
+            (await contract.allowance(
+                this.web3Service.walletAddress,
+                tokenSpender
+            )).eq(0)
+        ) {
+
+            return false;
+        } else {
+
+            return true;
+        }
+    }
 }
