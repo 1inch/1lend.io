@@ -97,13 +97,14 @@
                         <!--                        <th scope="col" style="vertical-align: middle;">Token</th>-->
                         <th scope="col">Pool</th>
                         <th class="text-center" scope="col">Interest</th>
+                        <th class="text-center" scope="col">Slippage</th>
                         <th class="text-center" scope="col">Balance</th>
                         <th class="text-center" scope="col">Action</th>
                     </tr>
                     </thead>
                     <tbody>
                     <tr *ngIf="!pools.length && dataLoading">
-                        <td class="align-middle text-center p-3" colspan="4">
+                        <td class="align-middle text-center p-3" colspan="5">
                             <img alt="Loading..." class="loading-spinner" src="assets/loading.svg" style="opacity: 0.1;"
                                  width="150">
                         </td>
@@ -122,7 +123,7 @@
                                 style="width: 32px">
                             {{pool.title}}
                             <span *ngIf="pool.type == 'double' && fromToken !== 'ETH'">
-                                <img [src]="'assets/tokens/asset_ETH.svg'"
+                                <img [src]="'assets/tokens/asset_' + (pool.name === 'bancor' ? 'BNT' : 'ETH') + '.svg'"
                                      style="width: 24px">
                                 <img [src]="'assets/tokens/asset_' + tokens[pool.token].symbol + '.svg'"
                                      style="width: 24px; margin-left: -8px;">
@@ -130,6 +131,9 @@
                         </td>
                         <td class="text-center align-middle">
                             {{toFixed(pool.interest, 2)}}%
+                        </td>
+                        <td class="text-center align-middle">
+                            {{toFixed(pool.slippage, 2)}}%
                         </td>
                         <td class="text-center align-middle">
                             {{pool.balance}}

@@ -273,7 +273,10 @@ export class LendComponent implements OnInit {
 
         if (this.fromTokenBalance === '0.0') {
 
-            this.fromTokenAmountControl.setValue('1.0');
+            if (this.fromTokenAmount === '0.0') {
+
+                this.fromTokenAmountControl.setValue('1.0');
+            }
         } else {
 
             this.fromTokenAmountControl.setValue(this.fromTokenBalance);
@@ -383,7 +386,13 @@ export class LendComponent implements OnInit {
             return false;
         }
 
-        this.pools = await this.poolsService.getPools(this.fromToken);
+        this.pools = await this.poolsService.getPools(
+            this.fromToken,
+            this.tokenService.parseAsset(
+                this.fromToken,
+                this.fromTokenAmount
+            )
+        );
 
         return true;
     }
