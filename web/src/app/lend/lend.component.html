@@ -6,7 +6,7 @@
             Aggregated Crypto Lending
             <fa-icon (click)="refresh()" *ngIf="!loading && !dataLoading" [icon]="refreshIcon"
                      style="font-size: 18px; cursor: pointer;"></fa-icon>
-            <img alt="Loading..." *ngIf="dataLoading" class="loading-spinner" width="32" src="assets/loading.svg">
+            <img *ngIf="dataLoading" alt="Loading..." class="loading-spinner" src="assets/loading.svg" width="32">
         </h5>
         <div class="card-body p-0 p-md-3">
 
@@ -49,7 +49,7 @@
                                         <span>
                                             <img [src]="'assets/tokens/asset_' + tokens[fromToken].symbol + '.svg'"
                                                  class="mr-1"
-                                                style="width: 24px">
+                                                 style="width: 24px">
 
                                             {{fromToken}}
                                         </span>
@@ -104,7 +104,8 @@
                     <tbody>
                     <tr *ngIf="!pools.length && dataLoading">
                         <td class="align-middle text-center p-3" colspan="4">
-                            <img alt="Loading..." class="loading-spinner" style="opacity: 0.1;" width="150" src="assets/loading.svg">
+                            <img alt="Loading..." class="loading-spinner" src="assets/loading.svg" style="opacity: 0.1;"
+                                 width="150">
                         </td>
                     </tr>
                     <tr *ngFor="let pool of pools">
@@ -114,7 +115,9 @@
                             {{tokens[pool.token].symbol}}
                         </td>
                         <td class="align-middle">
-                            <img [src]="'assets/pools/' + pool.icon" class="mr-1" style="width: 32px">
+                            <img [class]="!themeService.isDarkMode && pool.lightThemeIconInvert ? 'invert-image' : ''" [src]="'assets/pools/' + pool.icon"
+                                 class="mr-1"
+                                 style="width: 32px">
                             {{pool.name}}
                         </td>
                         <td class="text-center">
@@ -125,7 +128,7 @@
                         </td>
                         <td class="text-right">
                             <button class="btn btn-sm btn-success mr-1">Deposit</button>
-                            <button class="btn btn-sm btn-danger" [disabled]="pool.balance === '0'">Withdraw</button>
+                            <button [disabled]="pool.balance === '0'" class="btn btn-sm btn-danger">Withdraw</button>
                         </td>
                     </tr>
                     </tbody>

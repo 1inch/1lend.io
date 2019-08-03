@@ -7,6 +7,7 @@ import {NgbDropdown} from '@ng-bootstrap/ng-bootstrap';
 import {Web3Service} from '../web3.service';
 import {TokenService} from '../token.service';
 import {debounceTime, distinctUntilChanged, map, startWith} from 'rxjs/operators';
+import {ThemeService} from '../theme.service';
 
 @Component({
     selector: 'app-lend',
@@ -29,21 +30,24 @@ export class LendComponent implements OnInit {
             icon: 'compound-v2.svg',
             token: 'DAI',
             interest: 15.3,
-            balance: '10.000'
+            balance: '10.000',
+            lightThemeIconInvert: false
         },
         {
             name: 'Lendroid',
             icon: 'lendroid.svg',
             token: 'DAI',
             interest: 10.12,
-            balance: '25.000'
+            balance: '25.000',
+            lightThemeIconInvert: true
         },
         {
             name: 'ETHLend',
             icon: 'ethlend.png',
             token: 'DAI',
             interest: 13.12,
-            balance: '100.000'
+            balance: '100.000',
+            lightThemeIconInvert: true
         }
     ];
 
@@ -70,7 +74,8 @@ export class LendComponent implements OnInit {
 
     constructor(
         public tokenService: TokenService,
-        public web3Service: Web3Service
+        public web3Service: Web3Service,
+        public themeService: ThemeService
     ) {
     }
 
