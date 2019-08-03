@@ -4,13 +4,91 @@
         <h5 class="card-title text-center border-bottom m-0 mb-3 pb-3 pt-3"
             style="font-weight: 300; font-size: 1.5rem;">
             Aggregated Crypto Lending
-            <fa-icon (click)="refresh()" *ngIf="!loading" [icon]="refreshIcon"
+            <fa-icon (click)="refresh()" *ngIf="!loading && !dataLoading" [icon]="refreshIcon"
                      style="font-size: 18px; cursor: pointer;"></fa-icon>
+            <img alt="Loading..." *ngIf="dataLoading" class="loading-spinner" width="32" src="assets/loading.svg">
         </h5>
         <div class="card-body p-0 p-md-3">
 
             <app-loading-spinner *ngIf="loading"></app-loading-spinner>
             <div *ngIf="!loading">
+
+                <ngb-alert (close)="done = false" *ngIf="done" class="mb-5" type="success">
+                    Transaction was successfully send.<br> <a
+                    [href]="'https://etherscan.io/tx/' + transactionHash" target="_blank">{{transactionHash}}</a>
+                </ngb-alert>
+
+                <ngb-alert (close)="error = false" *ngIf="error" class="mb-5" type="danger">
+                    An error is occured. Please try again or contact us.
+                    If you are using Metamask, you can try to switch from mainnet to testnet and back to solve this
+                    problem.
+                </ngb-alert>
+
+                <form #f="ngForm" class="d-flex flex-wrap flex-row justify-content-center pt-2" novalidate>
+                    <div class="form-group p-1 bd-highlight">
+                        <small (click)="setFromTokenAmount()"
+                               class="form-text text-muted text-left position-relative mb-1"
+                               id="fromTokenBalance"
+                               style="margin-top: -23px; white-space: nowrap;overflow: hidden;text-overflow: ellipsis; cursor: pointer;">
+                            Max: {{toFixed(fromTokenBalance, 12)}}
+                            <span *ngIf="fromToken === 'ETH'">(-5% for gas)</span>
+                        </small>
+                        <input [formControl]="fromTokenAmountControl"
+                               aria-describedby="fromTokenBalance" autocomplete="off"
+                               class="form-control text-left" id="fromTokenAmount" inputmode="numeric"
+                               name="fromTokenAmount" numeric numericType="decimal" pattern="[0-9]*" placeholder="0"
+                               type="string">
+                    </div>
+                    <div class="form-group p-1 bd-highlight">
+
+                        <div #fromTokenDropDown="ngbDropdown" class="d-block mb-4 mb-md-0" ngbDropdown>
+                            <button class="btn btn-block btn-outline-secondary text-left is-flex"
+                                    id="fromTokenDropdown" ngbDropdownToggle
+                                    type="button">
+                                    <span>
+                                        <img [src]="'assets/tokens/' + tokens[fromToken].address.toLowerCase() + '.png'"
+                                             class="mr-1"
+                                             onerror="this.src = 'assets/tokens/token.png';" style="width: 24px">
+
+                                        {{fromToken}}
+                                    </span>
+                            </button>
+                            <div aria-labelledby="fromTokenDropdown" ngbDropdownMenu>
+
+                                <div class="p-2 border-bottom">
+
+                                    <input #fromTokenSearchField [formControl]="fromTokenSearchControl"
+                                           autocomplete="off"
+                                           class="form-control border-0" id="fromTokenSearch"
+                                           placeholder='Try "DAI"' type="search">
+                                </div>
+
+                                <div id="fromTokenScrollArea">
+                                    <div class="p-2">
+
+                                        <ul class="list-group list-group-flush">
+                                            <li (click)="setFromToken(token)"
+                                                *ngFor="let token of fromTokenSearchResults | async"
+                                                class="list-group-item">
+                                                <img
+                                                    [src]="'assets/tokens/' + token.address.toLowerCase() + '.png'"
+                                                    class="mr-1"
+                                                    onerror="this.src = 'assets/tokens/token.png';"
+                                                    style="width: 16px">
+
+                                                {{token.symbol}}
+                                                <br>
+                                                <span *ngIf="token.balance"
+                                                      class="text-secondary">{{toFixed(tokenService.formatAsset(token.symbol, token.balance), 18)}}</span>
+                                            </li>
+                                        </ul>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
             </div>
         </div>
     </div>

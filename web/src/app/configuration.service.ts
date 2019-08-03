@@ -13,6 +13,8 @@ export class ConfigurationService {
     public GAS_PRICE_URL = 'https://gasprice.poa.network';
     public CORS_PROXY_URL = 'https://corsproxy.1inch.exchange/';
 
+    public TOKEN_AGGREGATOR_SMART_CONTRACT_ADDRESS = ethers.utils.getAddress('0x9f436186FAa769eA776D793c084dC1B66F593164');
+
     public fastGasPrice;
     public standardGasPrice;
     public instantGasPrice;
