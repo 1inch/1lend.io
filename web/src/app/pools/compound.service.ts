@@ -21,10 +21,22 @@ export class CompoundService implements PoolInterface {
 
     getBalance(tokenSymbol: string, walletAddress: string): Promise<BigNumber> {
 
+        tokenSymbol = 'c' + tokenSymbol;
+
         return this.tokenService.getTokenBalance(tokenSymbol, walletAddress);
     }
 
+    async getFormatedBalance(tokenSymbol: string, walletAddress: string): Promise<string> {
+
+        return this.tokenService.formatAsset(
+            'c' + tokenSymbol,
+            await this.getBalance(tokenSymbol, walletAddress)
+        );
+    }
+
     async interest(tokenSymbol: string): Promise<number> {
+
+        tokenSymbol = 'c' + tokenSymbol;
 
         const contract = new ethers.Contract(
             this.tokenService.tokens[tokenSymbol].address,
@@ -49,6 +61,8 @@ export class CompoundService implements PoolInterface {
     }
 
     async slippage(tokenSymbol: string, amount: BigNumber): Promise<number> {
+
+        tokenSymbol = 'c' + tokenSymbol;
 
         const contract = new ethers.Contract(
             this.tokenService.tokens[tokenSymbol].address,
@@ -75,6 +89,8 @@ export class CompoundService implements PoolInterface {
     }
 
     async deposit(tokenSymbol: string, amount: BigNumber) {
+
+        tokenSymbol = 'c' + tokenSymbol;
 
         const contract = new ethers.Contract(
             this.tokenService.tokens[tokenSymbol].address,

@@ -1463,7 +1463,7 @@ export class TokenService {
             this.web3Service.provider
         );
 
-        return await contract.balanceOf(address);
+        return contract.balanceOf(address);
     }
 
     async balancesOfTokens(

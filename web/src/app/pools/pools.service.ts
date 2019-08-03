@@ -5,6 +5,7 @@ import {LendroidService} from './lendroid.service';
 import {CompoundService} from './compound.service';
 import {Web3Service} from '../web3.service';
 import {BigNumber} from 'ethers/utils';
+import {UniswapService} from './uniswap.service';
 
 @Injectable({
     providedIn: 'root'
@@ -30,7 +31,7 @@ export class PoolsService {
         },
         {
             name: 'kyber',
-            title: 'Kyber Network',
+            title: 'Kyber',
             icon: 'kyber-network.png',
             lightThemeIconInvert: true,
             darkThemeIconInvert: false,
@@ -38,7 +39,7 @@ export class PoolsService {
         },
         {
             name: 'bancor',
-            title: 'Bancor Network',
+            title: 'Bancor',
             icon: 'bancor-network.png',
             lightThemeIconInvert: true,
             darkThemeIconInvert: true,
@@ -97,6 +98,7 @@ export class PoolsService {
         private tokenService: TokenService,
         private lendroidService: LendroidService,
         private compoundService: CompoundService,
+        private uniswapService: UniswapService,
         private web3Service: Web3Service
     ) {
     }
@@ -124,6 +126,7 @@ export class PoolsService {
 
             } catch (e) {
 
+                console.error(e);
             }
         }
 
@@ -142,7 +145,17 @@ export class PoolsService {
 
                 return this.tokenService.formatAsset(
                     'c' + token,
-                    await this.compoundService.getBalance('c' + token, this.web3Service.walletAddress)
+                    await this.compoundService.getBalance(token, this.web3Service.walletAddress)
+                );
+                break;
+            case 'uniswap':
+
+                return this.tokenService.formatAsset(
+                    token,
+                    await this.uniswapService.getBalance(
+                        this.tokenService.tokens[token].address,
+                        this.web3Service.walletAddress
+                    )
                 );
                 break;
             default:
@@ -156,7 +169,14 @@ export class PoolsService {
         switch (pool) {
             case 'compound-v2':
 
-                return this.compoundService.interest('c' + token);
+                return this.compoundService.interest(token);
+                break;
+            case 'uniswap':
+
+                return this.uniswapService.interest(
+                    this.tokenService.tokens[token].address
+                );
+
                 break;
             default:
                 return ethers.utils.bigNumberify(0);
@@ -169,7 +189,15 @@ export class PoolsService {
         switch (pool) {
             case 'compound-v2':
 
-                return this.compoundService.slippage('c' + token, amount);
+                return this.compoundService.slippage(token, amount);
+                break;
+            case 'uniswap':
+
+                return this.uniswapService.slippage(
+                    this.tokenService.tokens[token].address,
+                    amount
+                );
+
                 break;
             default:
                 return ethers.utils.bigNumberify(0);

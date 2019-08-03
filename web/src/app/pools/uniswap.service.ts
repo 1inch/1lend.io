@@ -5,6 +5,7 @@ import { Web3Service } from '../web3.service';
 import { BigNumber } from 'ethers/utils';
 import { ethers } from 'ethers';
 
+declare let require: any;
 const UNISWAP_ABI = require('../abi/Uniswap.json');
 
 @Injectable({
@@ -20,7 +21,21 @@ export class UniswapService implements PoolInterface {
 
     getBalance(tokenAddress: string, walletAddress: string): Promise<BigNumber> {
 
+        const contract = new ethers.Contract(
+            tokenAddress,
+            UNISWAP_ABI,
+            this.web3Service.provider
+        );
+
         return this.tokenService.getTokenBalanceByAddress(tokenAddress, walletAddress);
+    }
+
+    async getFormatedBalance(tokenSymbol: string, walletAddress: string): Promise<string> {
+
+        return this.tokenService.formatAsset(
+            tokenSymbol,
+            await this.getBalance(tokenSymbol, walletAddress)
+        );
     }
 
     async interest(tokenAddress: string): Promise<number> {
