@@ -86,7 +86,7 @@ export class KyberService implements PoolInterface {
 
         const currentBlock = await this.web3Service.provider.getBlockNumber();
         const rawResult = await this.web3Service.provider.getLogs({
-            address: [],
+            address: null,
             fromBlock: currentBlock - 10000,
             toBlock: currentBlock,
             topics: [
