@@ -7,3 +7,4 @@ yarn.lock
 build
 .outputParameter
 .yarn-error.log
+.vscode
