@@ -22,6 +22,28 @@ export class CompoundService implements PoolInterface {
         return this.tokenService.getTokenBalance(tokenSymbol, walletAddress);
     }
 
+    async interest(tokenSymbol: string): Promise<number> {
+        const contract = new ethers.Contract(
+            this.tokenService.tokens[tokenSymbol].address,
+            CERC20_ABI,
+            this.web3Service.provider
+        );
+
+        const [
+            blockBorrowRate,
+            totalBorrows,
+            cash
+        ] = await Promise.all([
+            contract.borrowRatePerBlock(),
+            contract.totalBorrows(),
+            contract.getCash(),
+        ]);
+
+        const annualBorrowRate = parseInt(blockBorrowRate.mul(365*24*60*60).div(12).mul(10000).div(1e18).toString()) / 100;
+        const annualLendRate = Math.floor(annualBorrowRate * totalBorrows.toNumber() / cash.toNumber() * 100) / 100;
+        return annualLendRate;
+    }
+
     async deposit(tokenSymbol: string, amount: BigNumber) {
         const contract = new ethers.Contract(
             this.tokenService.tokens[tokenSymbol].address,
