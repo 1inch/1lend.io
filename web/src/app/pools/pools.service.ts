@@ -46,13 +46,13 @@ export class PoolsService {
             lightThemeIconInvert: true,
             darkThemeIconInvert: false
         },
-        {
-            name: 'compound-v1',
-            title: 'Compound V1',
-            icon: 'compound-v1.svg',
-            lightThemeIconInvert: false,
-            darkThemeIconInvert: false
-        },
+        // {
+        //     name: 'compound-v1',
+        //     title: 'Compound V1',
+        //     icon: 'compound-v1.svg',
+        //     lightThemeIconInvert: false,
+        //     darkThemeIconInvert: false
+        // },
         {
             name: 'compound-v2',
             title: 'Compound V2',
@@ -102,7 +102,7 @@ export class PoolsService {
                 title: pool.title,
                 icon: pool.icon,
                 token: this.tokenService.tokens[token].symbol,
-                interest: 0,
+                interest: await this.getInterestOf(pool.name, token),
                 balance: this.tokenService.formatAsset(token, await this.getBalanceOf(pool.name, token)),
                 lightThemeIconInvert: pool.lightThemeIconInvert,
                 darkThemeIconInvert: pool.darkThemeIconInvert
@@ -118,6 +118,19 @@ export class PoolsService {
             case 'compound-v2':
 
                 return this.compoundService.getBalance('c' + token, this.web3Service.walletAddress);
+                break;
+            default:
+                return ethers.utils.bigNumberify(0);
+                break;
+        }
+    }
+
+    async getInterestOf(pool: string, token: string) {
+
+        switch (pool) {
+            case 'compound-v2':
+
+                return this.compoundService.interest('c' + token);
                 break;
             default:
                 return ethers.utils.bigNumberify(0);
