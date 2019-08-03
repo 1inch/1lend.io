@@ -24,65 +24,67 @@
                     problem.
                 </ngb-alert>
 
-                <form #f="ngForm" class="d-flex flex-wrap flex-row justify-content-center pt-2" novalidate>
-                    <div class="form-group p-1 bd-highlight">
-                        <small (click)="setFromTokenAmount()"
-                               class="form-text text-muted text-left position-relative mb-1"
-                               id="fromTokenBalance"
-                               style="margin-top: -23px; white-space: nowrap;overflow: hidden;text-overflow: ellipsis; cursor: pointer;">
-                            Max: {{toFixed(fromTokenBalance, 12)}}
-                            <span *ngIf="fromToken === 'ETH'">(-5% for gas)</span>
-                        </small>
-                        <input [formControl]="fromTokenAmountControl"
-                               aria-describedby="fromTokenBalance" autocomplete="off"
-                               class="form-control text-left" id="fromTokenAmount" inputmode="numeric"
-                               name="fromTokenAmount" numeric numericType="decimal" pattern="[0-9]*" placeholder="0"
-                               type="string">
-                    </div>
-                    <div class="form-group p-1 bd-highlight">
+                <form #f="ngForm" class="pt-4" novalidate>
+                    <div class="form-row justify-content-md-center">
+                        <div class="form-group col-md-6">
+                            <small (click)="setFromTokenAmount()"
+                                   class="form-text text-muted text-left position-relative mb-1"
+                                   id="fromTokenBalance"
+                                   style="margin-top: -23px; white-space: nowrap;overflow: hidden;text-overflow: ellipsis; cursor: pointer;">
+                                Max: {{toFixed(fromTokenBalance, 12)}}
+                                <span *ngIf="fromToken === 'ETH'">(-5% for gas)</span>
+                            </small>
+                            <input [formControl]="fromTokenAmountControl"
+                                   aria-describedby="fromTokenBalance" autocomplete="off"
+                                   class="form-control text-left" id="fromTokenAmount" inputmode="numeric"
+                                   name="fromTokenAmount" numeric numericType="decimal" pattern="[0-9]*" placeholder="0"
+                                   type="string">
+                        </div>
+                        <div class="form-group col-md-2">
 
-                        <div #fromTokenDropDown="ngbDropdown" class="d-block mb-4 mb-md-0" ngbDropdown>
-                            <button class="btn btn-block btn-outline-secondary text-left is-flex"
-                                    id="fromTokenDropdown" ngbDropdownToggle
-                                    type="button">
-                                    <span>
-                                        <img [src]="'assets/tokens/' + tokens[fromToken].address.toLowerCase() + '.png'"
-                                             class="mr-1"
-                                             onerror="this.src = 'assets/tokens/token.png';" style="width: 24px">
+                            <div #fromTokenDropDown="ngbDropdown" class="d-block mb-4 mb-md-0" ngbDropdown>
+                                <button class="btn btn-block btn-outline-secondary text-left is-flex"
+                                        id="fromTokenDropdown" ngbDropdownToggle
+                                        type="button">
+                                        <span>
+                                            <img [src]="'assets/tokens/' + tokens[fromToken].address.toLowerCase() + '.png'"
+                                                 class="mr-1"
+                                                 onerror="this.src = 'assets/tokens/token.png';" style="width: 24px">
 
-                                        {{fromToken}}
-                                    </span>
-                            </button>
-                            <div aria-labelledby="fromTokenDropdown" ngbDropdownMenu>
+                                            {{fromToken}}
+                                        </span>
+                                </button>
+                                <div aria-labelledby="fromTokenDropdown" ngbDropdownMenu>
 
-                                <div class="p-2 border-bottom">
+                                    <div class="p-2 border-bottom">
 
-                                    <input #fromTokenSearchField [formControl]="fromTokenSearchControl"
-                                           autocomplete="off"
-                                           class="form-control border-0" id="fromTokenSearch"
-                                           placeholder='Try "DAI"' type="search">
-                                </div>
+                                        <input #fromTokenSearchField [formControl]="fromTokenSearchControl"
+                                               autocomplete="off"
+                                               class="form-control border-0" id="fromTokenSearch"
+                                               placeholder='Try "DAI"' type="search">
+                                    </div>
 
-                                <div id="fromTokenScrollArea">
-                                    <div class="p-2">
+                                    <div id="fromTokenScrollArea">
+                                        <div class="p-2">
 
-                                        <ul class="list-group list-group-flush">
-                                            <li (click)="setFromToken(token)"
-                                                *ngFor="let token of fromTokenSearchResults | async"
-                                                class="list-group-item">
-                                                <img
-                                                    [src]="'assets/tokens/' + token.address.toLowerCase() + '.png'"
-                                                    class="mr-1"
-                                                    onerror="this.src = 'assets/tokens/token.png';"
-                                                    style="width: 16px">
+                                            <ul class="list-group list-group-flush">
+                                                <li (click)="setFromToken(token)"
+                                                    *ngFor="let token of fromTokenSearchResults | async"
+                                                    class="list-group-item">
+                                                    <img
+                                                        [src]="'assets/tokens/' + token.address.toLowerCase() + '.png'"
+                                                        class="mr-1"
+                                                        onerror="this.src = 'assets/tokens/token.png';"
+                                                        style="width: 16px">
 
-                                                {{token.symbol}}
-                                                <br>
-                                                <span *ngIf="token.balance"
-                                                      class="text-secondary">{{toFixed(tokenService.formatAsset(token.symbol, token.balance), 18)}}</span>
-                                            </li>
-                                        </ul>
+                                                    {{token.symbol}}
+                                                    <br>
+                                                    <span *ngIf="token.balance"
+                                                          class="text-secondary">{{toFixed(tokenService.formatAsset(token.symbol, token.balance), 18)}}</span>
+                                                </li>
+                                            </ul>
 
+                                        </div>
                                     </div>
                                 </div>
                             </div>

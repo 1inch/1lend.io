@@ -1,0 +1,81 @@
+#fromTokenBalance,
+#toTokenBalance {
+
+    cursor: pointer;
+}
+
+#fromTokenBalance:hover,
+#toTokenBalance:hover {
+    text-decoration: underline;
+}
+
+#fromTokenDropdown,
+#toTokenDropdown {
+
+    outline: none;
+    color: rgb(33, 37, 41);
+    border-color: rgb(206, 212, 218);
+}
+
+#fromTokenDropdown:hover,
+#fromTokenDropdown:focus,
+#toTokenDropdown:hover,
+#toTokenDropdown:focus {
+
+    color: rgb(33, 37, 41);
+    background: transparent;
+    box-shadow: none;
+}
+
+.btn-outline-secondary:not(:disabled):not(.disabled).active,
+.btn-outline-secondary:not(:disabled):not(.disabled):active,
+.show > .btn-outline-secondary.dropdown-toggle {
+
+    background: transparent;
+}
+
+.dropdown-toggle::after {
+
+    color: rgb(33, 37, 41);
+}
+
+
+#fromTokenSearch:focus,
+#toTokenSearch:focus {
+
+    box-shadow: none;
+}
+
+
+#fromTokenScrollArea,
+#toTokenScrollArea {
+    max-height: 20rem;
+    overflow: auto;
+    min-width: 15rem;
+}
+
+.is-flex {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.list-group-item:hover {
+
+    cursor: pointer;
+}
+
+.list-group-item:hover,
+.list-group-item:active {
+
+    background: rgb(233, 236, 239);
+}
+
+.distributed-dex-list strong {
+    color: #00a900;
+}
+
+.spread-title {
+
+    font-weight: 300;
+}
