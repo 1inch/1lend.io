@@ -24,7 +24,9 @@ export class LendComponent implements OnInit {
     done = false;
     error = false;
     transactionHash = '';
+
     tokens;
+
     pools = [];
 
     fromTokenAmount = '';
@@ -58,7 +60,7 @@ export class LendComponent implements OnInit {
 
     ngOnInit() {
 
-        this.tokens = this.tokenService.tokens;
+        this.tokens = this.tokenService.poolTokens;
 
         this.initOnChangeStream();
 

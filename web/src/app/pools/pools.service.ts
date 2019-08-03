@@ -117,7 +117,7 @@ export class PoolsService {
         switch (pool) {
             case 'compound-v2':
 
-                return this.compoundService.getBalance(token, this.web3Service.walletAddress);
+                return this.compoundService.getBalance('c' + token, this.web3Service.walletAddress);
                 break;
             default:
                 return ethers.utils.bigNumberify(0);
