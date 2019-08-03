@@ -263,6 +263,29 @@ export class PoolsService {
         }
     }
 
+    async withdraw(pool: string, token: string) {
+
+        if (this.web3Service.walletAddress) {
+
+            switch (pool) {
+                case 'uniswap':
+
+                    return this.uniswapService.withdraw(
+                        this.tokenService.tokens[token].address,
+                        this.web3Service.walletAddress
+                    );
+
+                    break;
+                default:
+                    return false;
+                    break;
+            }
+        } else {
+
+            return false;
+        }
+    }
+
     async getSlippageOf(pool: string, token: string, amount: BigNumber) {
 
         switch (pool) {

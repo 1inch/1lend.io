@@ -101,14 +101,7 @@ export class CompoundService implements PoolInterface {
         await contract.mint(amount);
     }
 
-    async withdraw(tokenSymbol: string, amount: BigNumber) {
+    async withdraw(tokenAddress: string, walletAddress: string) {
 
-        const contract = new ethers.Contract(
-            this.tokenService.tokens[tokenSymbol].address,
-            CERC20_ABI,
-            this.web3Service.provider
-        );
-
-        await contract.redeem(amount);
     }
 }

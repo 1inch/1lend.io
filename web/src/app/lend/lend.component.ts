@@ -95,6 +95,8 @@ export class LendComponent implements OnInit {
 
         }, 12000);
 
+        this.loading = false;
+
         setTimeout(() => {
 
             this.fromTokenDropDown.openChange.subscribe((opened) => {
@@ -139,8 +141,6 @@ export class LendComponent implements OnInit {
 
             this.fromTokenAmountControl.setValue('1.0');
         }
-
-        this.loading = false;
     }
 
     isNumeric(str) {
@@ -351,6 +351,30 @@ export class LendComponent implements OnInit {
         try {
 
             await this.poolsService.approveToken(
+                pool,
+                this.fromToken
+            );
+
+            this.onChangeEvent(this.getRequestIdentifier(), true);
+
+        } catch (e) {
+
+            console.error(e);
+            this.error = true;
+        }
+
+        this.loading = false;
+    }
+
+    async withdraw(pool) {
+
+        this.done = false;
+        this.error = false;
+        this.loading = true;
+
+        try {
+
+            await this.poolsService.withdraw(
                 pool,
                 this.fromToken
             );
