@@ -82,8 +82,9 @@
 
     <div class="ml-auto mr-auto">
         <a class="navbar-brand" routerLink="/">
-            <img alt="1lend.io" *ngIf="!themeService.isDarkMode" height="70" src="assets/logo-small-with-title.svg">
-            <img alt="1lend.io" *ngIf="themeService.isDarkMode" height="70" src="assets/logo-small-with-title-very-light.svg">
+            <img *ngIf="!themeService.isDarkMode" alt="1lend.io" height="70" src="assets/logo-small-with-title.svg">
+            <img *ngIf="themeService.isDarkMode" alt="1lend.io" height="70"
+                 src="assets/logo-small-with-title-very-light.svg">
         </a>
     </div>
 
@@ -104,7 +105,8 @@
 <div class="text-center mt-2" style="opacity: 0.3;">
     <h5>ENS: <a href="https://etherscan.io/address/{{contractAddress}}"
                 target="_blank">{{(ensDomain ? ensDomain : 'is updating...')}}</a></h5>
-    <h6 style="font-weight: 100; font-size: 0.9rem;">BUIDL <a href="https://ethindia.co/" target="_blank">@ETHIndia</a> 2019 by</h6>
+    <h6 style="font-weight: 100; font-size: 0.9rem;">BUIDL <a href="https://ethindia.co/" target="_blank">@ETHIndia</a>
+        2019 by</h6>
     <img alt="Crypto Maniacs" src="assets/cryptomaniacs.png" width="200">
 </div>
 
@@ -121,7 +123,7 @@
 
         <div *ngIf="!connectInProgress">
 
-            <div class="text-center border-bottom pb-3" *ngIf="web3Service.txProvider && web3Service.txProviderName">
+            <div *ngIf="web3Service.txProvider && web3Service.txProviderName" class="text-center border-bottom pb-3">
                 <h5 class="spread-title pb-3">Connected wallet:</h5>
                 <button class="btn btn-default btn-wallet-connect btn-wallet-connected" style="cursor: default;">
                     <div *ngIf="web3Service.txProviderName === 'metamask'">
@@ -142,6 +144,23 @@
                     <div *ngIf="web3Service.txProviderName === 'torus'">
                         <img height="64" src="assets/torus.png"><br>
                         Torus
+                    </div>
+
+                    <div *ngIf="web3Service.txProviderName === 'fortmatic'">
+                        <img height="64" src="assets/fortmatic.png"><br>
+                        Fortmatic
+                    </div>
+                    <div *ngIf="web3Service.txProviderName === 'squarelink'">
+                        <img height="64" src="assets/squarelink.png"><br>
+                        Squarelink
+                    </div>
+                    <div *ngIf="web3Service.txProviderName === 'portis'">
+                        <img height="64" src="assets/portis.png"><br>
+                        Portis
+                    </div>
+                    <div *ngIf="web3Service.txProviderName === 'wallet-connect'">
+                        <img height="64" src="assets/wallet-connect.png"><br>
+                        Wallet Connect
                     </div>
                 </button>
 
@@ -187,14 +206,50 @@
 
                 </div>
 
-                <div class="p-2 bd-highlight" *ngIf="web3Service.txProviderName !== 'torus'">
+                <div *ngIf="web3Service.txProviderName !== 'torus'" class="p-2 bd-highlight">
 
                     <button (click)="connect('torus')" class="btn btn-default btn-wallet-connect">
                         <img height="64" src="assets/torus.png"><br>
                         Torus
                     </button>
+                </div>
+
+                <div *ngIf="web3Service.txProviderName !== 'fortmatic'" class="p-2 bd-highlight">
+
+                    <button (click)="connect('fortmatic')" class="btn btn-default btn-wallet-connect">
+                        <img height="64" src="assets/fortmatic.png"><br>
+                        Fortmatic
+                    </button>
 
                 </div>
+
+                <div *ngIf="web3Service.txProviderName !== 'squarelink'" class="p-2 bd-highlight">
+
+                    <button (click)="connect('squarelink')" class="btn btn-default btn-wallet-connect">
+                        <img height="64" src="assets/squarelink.png"><br>
+                        Squarelink
+                    </button>
+
+                </div>
+
+                <div *ngIf="web3Service.txProviderName !== 'portis'" class="p-2 bd-highlight">
+
+                    <button (click)="connect('portis')" class="btn btn-default btn-wallet-connect">
+                        <img height="64" src="assets/portis.png"><br>
+                        Portis
+                    </button>
+
+                </div>
+
+                <div *ngIf="web3Service.txProviderName !== 'wallet-connect'" class="p-2 bd-highlight">
+
+                    <button (click)="connect('wallet-connect')" class="btn btn-default btn-wallet-connect">
+                        <img height="64" src="assets/wallet-connect.png"><br>
+                        Wallet Connect
+                    </button>
+
+                </div>
+
             </div>
         </div>
         <div *ngIf="connectInProgress" class="text-center pb-4 pt-3">
@@ -207,4 +262,4 @@
 
     </div>
 </ng-template>
-<app-notifications aria-live="polite" aria-atomic="true"></app-notifications>
+<app-notifications aria-atomic="true" aria-live="polite"></app-notifications>

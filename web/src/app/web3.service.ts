@@ -2,6 +2,10 @@ import {Injectable} from '@angular/core';
 import {ethers} from 'ethers';
 import {ConfigurationService} from './configuration.service';
 import Jazzicon from 'jazzicon';
+import WalletConnectProvider from '@walletconnect/web3-provider';
+import Portis from '@portis/web3';
+import Squarelink from 'squarelink';
+import Fortmatic from 'fortmatic';
 
 import Web3 from 'web3';
 import {Subject} from 'rxjs';
@@ -58,7 +62,7 @@ export class Web3Service {
         }
     }
 
-    async disconnect() {
+    async disconnect(wallet = null) {
 
         if (this.thirdPartyProvider) {
             console.log('thirdPartyProvider', this.thirdPartyProvider);
@@ -82,16 +86,33 @@ export class Web3Service {
 
         localStorage.setItem('txProviderName', '');
 
+        if (wallet !== null) {
+
+            localStorage.setItem('txProviderName', wallet);
+        }
+
         this.disconnectEvent.next();
     }
 
     async connect(wallet) {
 
-        await this.disconnect();
+        await this.disconnect(wallet);
 
         switch (wallet) {
             case 'torus':
                 await this.enableTorusTxProvider();
+                break;
+            case 'portis':
+                await this.enablePortisTxProvider();
+                break;
+            case 'fortmatic':
+                await this.enableFortmaticTxProvider();
+                break;
+            case 'squarelink':
+                await this.enableSquarelinkTxProvider();
+                break;
+            case 'wallet-connect':
+                await this.enableWalletConnectTxProvider();
                 break;
             case 'metamask':
             default:
@@ -202,6 +223,89 @@ export class Web3Service {
                 });
             }));
 
+        } catch (e) {
+
+            console.error(e);
+            throw new Error(e);
+        }
+    }
+
+    async enableSquarelinkTxProvider() {
+
+        try {
+
+            const sqlk = new Squarelink('2685917105c01ad933ea');
+
+            this.txProvider = new Web3(
+                sqlk.getProvider()
+            );
+
+            await this.txProvider.eth.getAccounts();
+
+            this.txProviderName = 'squarelink';
+            this.thirdPartyProvider = sqlk;
+        } catch (e) {
+
+            console.error(e);
+            throw new Error(e);
+        }
+    }
+
+    async enableFortmaticTxProvider() {
+
+        try {
+            const fm = new Fortmatic('pk_live_7BCE996AE3CFEEC5');
+
+            this.txProvider = new Web3(
+                fm.getProvider()
+            );
+
+            await fm.user.login();
+
+            this.txProviderName = 'fortmatic';
+            this.thirdPartyProvider = fm;
+        } catch (e) {
+
+            console.error(e);
+            throw new Error(e);
+        }
+    }
+
+    async enablePortisTxProvider() {
+
+        try {
+
+            const portis = new Portis('4775c8d9-e6fe-4cdf-8c54-2f199d73b62a', 'mainnet');
+
+            this.txProvider = new Web3(
+                portis.provider
+            );
+
+            this.txProviderName = 'portis';
+            this.thirdPartyProvider = portis;
+        } catch (e) {
+
+            console.error(e);
+            throw new Error(e);
+        }
+    }
+
+    async enableWalletConnectTxProvider() {
+
+        try {
+
+            const walletConnectProvider = new WalletConnectProvider({
+                bridge: 'https://bridge.walletconnect.org'
+            });
+
+            this.txProvider = new Web3(
+                walletConnectProvider
+            );
+
+            await walletConnectProvider.enable();
+
+            this.txProviderName = 'wallet-connect';
+            this.thirdPartyProvider = walletConnectProvider;
         } catch (e) {
 
             console.error(e);
