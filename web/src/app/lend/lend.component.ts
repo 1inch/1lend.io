@@ -386,7 +386,7 @@ export class LendComponent implements OnInit {
             return false;
         }
 
-        if (this.getRequestIdentifier() !== identifier) {
+        if (!force && this.getRequestIdentifier() !== identifier) {
 
             return false;
         }
