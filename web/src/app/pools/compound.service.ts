@@ -42,10 +42,36 @@ export class CompoundService implements PoolInterface {
             contract.getCash(),
         ]);
 
-        const annualBorrowRate = blockBorrowRate.mul(365 * 24 * 60 * 60).div(12).mul(10000).div(1e9).div(1e9);
-        const annualLendRate = annualBorrowRate.mul(totalBorrows).div(cash.add(totalBorrows));
+        const annualBorrowRate = blockBorrowRate.mul(365 * 24 * 60 * 60).div(25).mul(2).mul(10000).div(1e9).div(1e9);
+        const annualLendRate = annualBorrowRate.mul(totalBorrows).div(totalBorrows.add(cash));
 
         return Number(ethers.utils.formatUnits(annualLendRate, 2));
+    }
+
+    async slippage(tokenSymbol: string, amount: BigNumber): Promise<number> {
+
+        const contract = new ethers.Contract(
+            this.tokenService.tokens[tokenSymbol].address,
+            CERC20_ABI,
+            this.web3Service.provider
+        );
+
+        const [
+            blockBorrowRate,
+            totalBorrows,
+            cash
+        ] = await Promise.all([
+            contract.borrowRatePerBlock(),
+            contract.totalBorrows(),
+            contract.getCash(),
+        ]);
+
+        const annualBorrowRate = blockBorrowRate.mul(365 * 24 * 60 * 60).div(25).mul(2).mul(10000).div(1e9).div(1e9);
+        const annualLendRate = annualBorrowRate.mul(totalBorrows).div(totalBorrows.add(cash));
+        const nextAnnualLendRate = annualBorrowRate.mul(totalBorrows).div(totalBorrows.add(cash).add(amount));
+        const diffLendRate = nextAnnualLendRate.sub(annualLendRate);
+
+        return Number(ethers.utils.formatUnits(diffLendRate, 2));
     }
 
     async deposit(tokenSymbol: string, amount: BigNumber) {
