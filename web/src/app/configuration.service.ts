@@ -15,6 +15,8 @@ export class ConfigurationService {
 
     public TOKEN_AGGREGATOR_SMART_CONTRACT_ADDRESS = ethers.utils.getAddress('0x9f436186FAa769eA776D793c084dC1B66F593164');
 
+    public UNISWAP_FACTORY_CONTRACT_ADDRESS = '0xc0a47dFe034B400B47bDaD5FecDa2621de6c4d95';
+
     public fastGasPrice;
     public standardGasPrice;
     public instantGasPrice;
