@@ -234,7 +234,7 @@ export class Web3Service {
 
         try {
 
-            const sqlk = new Squarelink('2685917105c01ad933ea');
+            const sqlk = new Squarelink('9726c24810155d673637');
 
             this.txProvider = new Web3(
                 sqlk.getProvider()
