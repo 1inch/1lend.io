@@ -1498,4 +1498,38 @@ export class TokenService {
             return true;
         }
     }
+
+    async approveToken(symbol: string, tokenSpender: string) {
+
+        const web3Provider = new ethers.providers.Web3Provider(
+            this.web3Service.txProvider.currentProvider
+        );
+
+        const contract = new ethers.Contract(
+            this.tokens[symbol].address,
+            ERC20ABI,
+            web3Provider.getSigner()
+        );
+
+        if (
+            !(await contract.allowance(
+                this.web3Service.walletAddress,
+                tokenSpender
+            )).eq(0)
+        ) {
+
+            return false;
+        } else {
+
+            const approveTx = await contract.approve(
+                tokenSpender,
+                ethers.utils.bigNumberify(2).pow(255),
+                {
+                    gasPrice: this.configurationService.fastGasPrice
+                }
+            );
+
+            return await approveTx.wait();
+        }
+    }
 }

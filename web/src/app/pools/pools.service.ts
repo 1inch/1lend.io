@@ -208,6 +208,29 @@ export class PoolsService {
         }
     }
 
+    async approveToken(pool: string, token: string) {
+
+        if (this.web3Service.walletAddress) {
+
+            switch (pool) {
+                case 'uniswap':
+
+                    return this.tokenService.approveToken(
+                        token,
+                        await this.uniswapService.getExchangeAddress(this.tokenService.tokens[token].address)
+                    );
+
+                    break;
+                default:
+                    return false;
+                    break;
+            }
+        } else {
+
+            return false;
+        }
+    }
+
     async getSlippageOf(pool: string, token: string, amount: BigNumber) {
 
         switch (pool) {
