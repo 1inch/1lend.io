@@ -8,6 +8,7 @@ import {ConfigurationService} from '../configuration.service';
 
 declare let require: any;
 const UNISWAP_ABI = require('../abi/Uniswap.json');
+const UNISWAP_VIEW_ABI = require('../abi/UniswapView.json');
 const UNISWAP_FACTORY_ABI = require('../abi/UniswapFactory.json');
 
 @Injectable({
@@ -47,6 +48,57 @@ export class UniswapService implements PoolInterface {
             tokenSymbol,
             await this.getBalance(tokenSymbol, walletAddress)
         );
+    }
+
+    async getTokensBalance(tokenAddress: string, walletAddress: string) {
+
+        const exchange = new ethers.Contract(
+            await this.getExchangeAddress(tokenAddress),
+            UNISWAP_VIEW_ABI,
+            this.web3Service.provider
+        );
+
+        return exchange.removeLiquidity(
+            await this.getBalance(tokenAddress, walletAddress),
+            1,
+            1,
+            Math.ceil(Date.now() / 1000) + 60 * 15,
+            {
+                from: walletAddress
+            }
+        );
+    }
+
+    async getFormatedTokensBalance(tokenSymbol: string, walletAddress: string): Promise<string> {
+
+        const tokensBalance = await this.getTokensBalance(
+            this.tokenService.tokens[tokenSymbol].address,
+            walletAddress
+        );
+
+        const ethAmount = tokensBalance[0];
+        const tokenAmount = tokensBalance[1];
+
+        let ethFormatedAmount = this.tokenService.formatAsset(
+            'ETH',
+            ethAmount
+        );
+
+        ethFormatedAmount = this.toFixed(ethFormatedAmount, 6);
+
+        let tokenFormatedAmount = this.tokenService.formatAsset(
+            tokenSymbol,
+            tokenAmount
+        );
+
+        tokenFormatedAmount = this.toFixed(tokenFormatedAmount, 6);
+
+        return ethFormatedAmount + ' ETH ' + '\n' + tokenFormatedAmount + ' ' + tokenSymbol;
+    }
+
+    toFixed(num, fixed) {
+        const re = new RegExp('^-?\\d+(?:\.\\d{0,' + (fixed || -1) + '})?');
+        return num.toString().match(re)[0];
     }
 
     async interest(tokenAddress: string): Promise<number> {
