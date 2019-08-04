@@ -128,7 +128,7 @@ export class KyberService implements PoolInterface {
                     );
                     resolve(await cc.tokenWallet(tokenAddress));
                 } catch(err) {
-                    resolve(c)
+                    resolve('0x0000000000000000000000000000000000000000')
                 }
             });
         }));
@@ -138,22 +138,23 @@ export class KyberService implements PoolInterface {
         const [
             currentEthBalances,
             currentTknBalances,
-            currentWalletBalances
+            // currentWalletBalances
         ]: Array<Array<BigNumber>> = await Promise.all([
             Promise.all(
                 allContracts.map(c => this.web3Service.provider.getBalance(c))
             ),
+            // Promise.all(
+            //     allContracts.map(c => this.tokenService.getTokenBalanceByAddress(tokenAddress, c))
+            // ),
             Promise.all(
-                allContracts.map(c => this.tokenService.getTokenBalanceByAddress(tokenAddress, c))
-            ),
-            Promise.all(
-                tokenWallets.map(w => this.tokenService.getTokenBalanceByAddress(tokenAddress, w))
+                tokenWallets.map(w => w == '0x0000000000000000000000000000000000000000' ? ethers.utils.bigNumberify(0) : this.tokenService.getTokenBalanceByAddress(tokenAddress, w))
             )
         ]);
 
         let totalEthSum = currentEthBalances.reduce((a,b) => a.add(b), ethers.utils.bigNumberify(0));
         let totalTknSum = currentTknBalances.reduce((a,b,i) => a.add(b).add(
-            tokenWallets[i] !== allContracts[i] ? currentWalletBalances[i] : ethers.utils.bigNumberify(0)
+            //tokenWallets[i] !== allContracts[i] ? currentWalletBalances[i] : ethers.utils.bigNumberify(0)
+            ethers.utils.bigNumberify(0)
         ), ethers.utils.bigNumberify(0));
         let feePercent = ethers.utils.bigNumberify(0);
 
@@ -234,8 +235,6 @@ export class KyberService implements PoolInterface {
                 }
             }
         }
-
-        console.log('feePercent', feePercent.toString());
 
         return feePercent.mul(365 * 24 * 60 * 60).div(duration).mul(10000).div(1e9).div(1e9).toNumber() / 100;
     }
