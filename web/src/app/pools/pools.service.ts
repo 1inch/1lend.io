@@ -211,6 +211,13 @@ export class PoolsService {
                 );
 
                 break;
+            case 'lendroid':
+
+                return this.lendroidService.interest(
+                    this.tokenService.tokens[token].address
+                );
+
+                break;
             default:
                 return ethers.utils.bigNumberify(0);
                 break;

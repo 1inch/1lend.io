@@ -119,7 +119,7 @@ export class UniswapService implements PoolInterface {
             this.web3Service.provider
         );
 
-        const delta = 20000;
+        const delta = 10000;
         const currentBlock = await this.web3Service.provider.getBlockNumber();
         const rawResult = await this.web3Service.provider.getLogs({
             address: contract.address,

@@ -8,10 +8,12 @@ import {HttpClient} from '@angular/common/http';
 })
 export class LendroidService implements PoolInterface {
 
+    endpoint;
+
     constructor(
         protected httpClient: HttpClient
     ) {
-        // https://winged-yeti-201009.appspot.com/offers
+        this.endpoint = 'https://winged-yeti-201009.appspot.com/offers';
     }
 
     deposit(tokenSymbol: string, amount: BigNumber) {
@@ -25,8 +27,15 @@ export class LendroidService implements PoolInterface {
         return undefined;
     }
 
-    interest(tokenSymbol: string): Promise<number> {
-        return undefined;
+    async interest(tokenSymbol: string): Promise<number> {
+
+        const result = (await this.httpClient.get(this.endpoint).toPromise())['result'];
+        let orders: Array<any> = Object.values(result);
+
+        orders = orders.map(order => Number(order.interestRatePerDay));
+        orders = orders.sort();
+
+        return orders[0];
     }
 
     withdraw(tokenAddress: string, walletAddress: string) {
