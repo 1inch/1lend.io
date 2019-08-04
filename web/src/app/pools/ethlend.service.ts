@@ -3,6 +3,13 @@ import {PoolInterface} from './pool.interface';
 import {BigNumber} from 'ethers/utils';
 import {HttpClient} from '@angular/common/http';
 
+function selectMany<TIn, TOut>(input: TIn[], selectListFn: (t: TIn) => TOut[]): TOut[] {
+    return input.reduce((out, inx) => {
+        out.push(...selectListFn(inx));
+        return out;
+    }, new Array<TOut>());
+}
+
 @Injectable({
     providedIn: 'root'
 })
@@ -13,7 +20,7 @@ export class EthlendService implements PoolInterface {
     constructor(
         protected httpClient: HttpClient
     ) {
-        this.endpoint = 'https://winged-yeti-201009.appspot.com/offers';
+        this.endpoint = 'https://main-cache-db.ethlend.io/loan-offers?state=WaitingForBorrower';
     }
 
     deposit(tokenSymbol: string, amount: BigNumber) {
@@ -29,13 +36,11 @@ export class EthlendService implements PoolInterface {
 
     async interest(tokenSymbol: string): Promise<number> {
 
-        // const result = (await this.httpClient.get(this.endpoint).toPromise())['result'];
-        // let orders: Array<any> = Object.values(result);
+        const result = (await this.httpClient.get(this.endpoint).toPromise());
+        let orders: Array<any> = selectMany(Object.values(result), order => order.collaterals);
+        orders = orders.map(order => order.mpr*12).sort();
 
-        // orders = orders.map(order => Number(order.interestRatePerDay));
-        // orders = orders.sort();
-
-        return Math.floor((3 + Math.random()*1.5)*100) / 100;
+        return orders[0];
     }
 
     withdraw(tokenAddress: string, walletAddress: string) {
