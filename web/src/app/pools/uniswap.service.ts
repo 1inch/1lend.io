@@ -252,8 +252,8 @@ export class UniswapService implements PoolInterface {
 
         await contract.removeLiquidity(
             await this.getBalance(tokenAddress, walletAddress),
-            0,
-            0,
+            1,
+            1,
             Math.ceil(Date.now() / 1000) + 60 * 15,
             {
                 gasPrice: this.configurationService.fastGasPrice
