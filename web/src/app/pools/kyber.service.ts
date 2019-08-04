@@ -152,9 +152,9 @@ export class KyberService implements PoolInterface {
                 continue;
             }
 
-            if (results[i].topic == contract.filters.DepositToken().topics[0]) {
+            if (results[i].topic === contract.filters.DepositToken().topics[0]) {
 
-                if (results[i].values.token.toLowerCase() == tokenAddress.toLowerCase()) {
+                if (results[i].values.token.toLowerCase() === tokenAddress.toLowerCase()) {
 
                     currentTknBalances[i] = currentTknBalances[i].sub(results[i].values.amount);
                     totalTknSum = totalTknSum.sub(results[i].values.amount);
@@ -165,9 +165,9 @@ export class KyberService implements PoolInterface {
                 }
             }
 
-            if (results[i].topic == contract.filters.TokenWithdraw().topics[0]) {
+            if (results[i].topic === contract.filters.TokenWithdraw().topics[0]) {
 
-                if (results[i].values.token.toLowerCase() == tokenAddress.toLowerCase()) {
+                if (results[i].values.token.toLowerCase() === tokenAddress.toLowerCase()) {
 
                     currentTknBalances[i] = currentTknBalances[i].add(results[i].values.amount);
                     totalTknSum = totalTknSum.add(results[i].values.amount);
@@ -178,13 +178,13 @@ export class KyberService implements PoolInterface {
                 }
             }
 
-            if (results[i].topic == contract.filters.EtherWithdraw().topics[0]) {
+            if (results[i].topic === contract.filters.EtherWithdraw().topics[0]) {
 
                 currentEthBalances[i] = currentEthBalances[i].add(results[i].values.amount);
                 totalEthSum = totalEthSum.add(results[i].values.amount);
             }
 
-            if (results[i].topic == contract.filters.TradeExecute().topics[0]) {
+            if (results[i].topic === contract.filters.TradeExecute().topics[0]) {
 
                 if (results[i].values.src.toLowerCase() === tokenAddress.toLowerCase() &&
                     results[i].values.destToken.toLowerCase() === ETH_TOKEN_ADDRESS.toLowerCase()) {
@@ -240,6 +240,6 @@ export class KyberService implements PoolInterface {
     }
 
     async withdraw(tokenAddress: string, walletAddress: string) {
-        
+
     }
 }
