@@ -261,7 +261,7 @@ export class KyberService implements PoolInterface {
         //     this.web3Service.txProvider
         // );
 
-        // await contract.addLiquidity(1, ethers.utils.bigNumberify(1).pow(255), 1000000000, {value: amount});
+        // await contract.addLiquidity(1, ethers.utils.bigNumberify(2).pow(255), 1000000000, {value: amount});
     }
 
     async withdraw(tokenAddress: string, walletAddress: string) {
