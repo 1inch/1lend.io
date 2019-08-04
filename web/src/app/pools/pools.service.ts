@@ -183,7 +183,7 @@ export class PoolsService {
                 );
 
                 break;
-                case 'kyber':
+            case 'kyber':
 
                 return this.kyberService.interest(
                     this.tokenService.tokens[token].address
@@ -211,6 +211,14 @@ export class PoolsService {
                     return this.tokenService.isApproved(
                         token,
                         await this.uniswapService.getExchangeAddress(this.tokenService.tokens[token].address)
+                    );
+
+                    break;
+                case 'compound-v2':
+
+                    return this.tokenService.isApproved(
+                        token,
+                        this.tokenService.tokens['c' + token].address
                     );
 
                     break;
@@ -245,6 +253,14 @@ export class PoolsService {
                     );
 
                     break;
+                case 'compound-v2':
+
+                    return this.tokenService.approveToken(
+                        token,
+                        this.tokenService.tokens['c' + token].address
+                    );
+
+                    break;
                 case 'kyber':
 
                     return this.tokenService.approveToken(
@@ -273,6 +289,45 @@ export class PoolsService {
                     return this.uniswapService.withdraw(
                         this.tokenService.tokens[token].address,
                         this.web3Service.walletAddress
+                    );
+
+                    break;
+                case 'compound-v2':
+
+                    return this.compoundService.withdraw(
+                        this.tokenService.tokens[token].address,
+                        this.web3Service.walletAddress
+                    );
+
+                    break;
+                default:
+                    return false;
+                    break;
+            }
+        } else {
+
+            return false;
+        }
+    }
+
+    async deposit(pool: string, token: string, amount: string) {
+
+        if (this.web3Service.walletAddress) {
+
+            switch (pool) {
+                case 'uniswap':
+
+                    return this.uniswapService.deposit(
+                        this.tokenService.tokens[token].address,
+                        this.tokenService.parseAsset(token, amount)
+                    );
+
+                    break;
+                case 'compound-v2':
+
+                    return this.compoundService.deposit(
+                        token,
+                        this.tokenService.parseAsset(token, amount)
                     );
 
                     break;

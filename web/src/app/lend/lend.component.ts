@@ -390,6 +390,31 @@ export class LendComponent implements OnInit {
         this.loading = false;
     }
 
+    async deposit(pool) {
+
+        this.done = false;
+        this.error = false;
+        this.loading = true;
+
+        try {
+
+            await this.poolsService.deposit(
+                pool,
+                this.fromToken,
+                this.fromTokenAmount
+            );
+
+            this.onChangeEvent(this.getRequestIdentifier(), true);
+
+        } catch (e) {
+
+            console.error(e);
+            this.error = true;
+        }
+
+        this.loading = false;
+    }
+
     connect() {
 
         this.connectService.startConnectEvent.next();

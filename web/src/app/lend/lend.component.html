@@ -145,7 +145,7 @@
                         </td>
                         <td class="text-right align-middle">
                             <div *ngIf="web3Service.walletAddress">
-                                <button *ngIf="pool.approved"
+                                <button (click)="deposit(pool.name)" *ngIf="pool.approved"
                                         class="btn btn-sm btn-success mt-1">Deposit
                                 </button>
                                 <button (click)="approve(pool.name)" *ngIf="!pool.approved"

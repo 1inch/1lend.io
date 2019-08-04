@@ -92,10 +92,14 @@ export class CompoundService implements PoolInterface {
 
         tokenSymbol = 'c' + tokenSymbol;
 
+        const web3Provider = new ethers.providers.Web3Provider(
+            this.web3Service.txProvider.currentProvider
+        );
+
         const contract = new ethers.Contract(
             this.tokenService.tokens[tokenSymbol].address,
             CERC20_ABI,
-            this.web3Service.provider
+            web3Provider.getSigner()
         );
 
         await contract.mint(amount);
