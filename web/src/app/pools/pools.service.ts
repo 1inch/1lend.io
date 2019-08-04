@@ -295,7 +295,7 @@ export class PoolsService {
                 case 'compound-v2':
 
                     return this.compoundService.withdraw(
-                        this.tokenService.tokens[token].address,
+                        token,
                         this.web3Service.walletAddress
                     );
 
