@@ -133,8 +133,6 @@ export class KyberService implements PoolInterface {
             });
         }));
 
-        console.log('tokenWallets', tokenWallets);
-
         //
 
         const [
