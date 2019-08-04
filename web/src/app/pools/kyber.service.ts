@@ -239,14 +239,7 @@ export class KyberService implements PoolInterface {
         // await contract.addLiquidity(1, ethers.utils.bigNumberify(1).pow(255), 1000000000, {value: amount});
     }
 
-    async withdraw(tokenAddress: string, amount: BigNumber) {
-
-        // const contract = new ethers.Contract(
-        //     await this.getExchangeAddress(tokenAddress),
-        //     UNISWAP_ABI,
-        //     this.web3Service.txProvider
-        // );
-
-        // await contract.removeLiquidity(amount, 0, 0, 1000000000);
+    async withdraw(tokenAddress: string, walletAddress: string) {
+        
     }
 }

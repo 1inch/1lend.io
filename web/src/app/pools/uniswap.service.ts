@@ -147,19 +147,19 @@ export class UniswapService implements PoolInterface {
 
         for (let i = results.length - 1; i > 0; i--) {
 
-            if (results[i].topic == contract.filters.AddLiquidity().topics[0]) {
+            if (results[i].topic === contract.filters.AddLiquidity().topics[0]) {
 
                 currentEthBalance = currentEthBalance.sub(results[i].values.eth_amount);
                 currentTknBalance = currentTknBalance.sub(results[i].values.token_amount);
             }
 
-            if (results[i].topic == contract.filters.RemoveLiquidity().topics[0]) {
+            if (results[i].topic === contract.filters.RemoveLiquidity().topics[0]) {
 
                 currentEthBalance = currentEthBalance.add(results[i].values.eth_amount);
                 currentTknBalance = currentTknBalance.add(results[i].values.token_amount);
             }
 
-            if (results[i].topic == contract.filters.EthPurchase().topics[0]) {
+            if (results[i].topic === contract.filters.EthPurchase().topics[0]) {
 
                 const invariant = currentEthBalance.mul(currentTknBalance);
                 currentEthBalance = currentEthBalance.add(results[i].values.eth_bought);
@@ -168,7 +168,7 @@ export class UniswapService implements PoolInterface {
                 feePercent = feePercent.add(fee.mul(1e9).mul(1e9).div(invariant));
             }
 
-            if (results[i].topic == contract.filters.TokenPurchase().topics[0]) {
+            if (results[i].topic === contract.filters.TokenPurchase().topics[0]) {
 
                 const invariant = currentEthBalance.mul(currentTknBalance);
                 currentEthBalance = currentEthBalance.sub(results[i].values.eth_sold);
@@ -178,7 +178,7 @@ export class UniswapService implements PoolInterface {
             }
         }
 
-        return feePercent.mul(365*24*60*60).div(duration).mul(10000).div(1e9).toNumber() / 100;
+        return feePercent.mul(365 * 24 * 60 * 60).div(duration).mul(10000).div(1e9).div(1e9).toNumber() / 100;
     }
 
     async slippage(tokenAddress: string, amount: BigNumber): Promise<number> {
@@ -193,23 +193,41 @@ export class UniswapService implements PoolInterface {
 
     async deposit(tokenAddress: string, amount: BigNumber) {
 
+        const web3Provider = new ethers.providers.Web3Provider(
+            this.web3Service.txProvider.currentProvider
+        );
+
         const contract = new ethers.Contract(
             await this.getExchangeAddress(tokenAddress),
             UNISWAP_ABI,
-            this.web3Service.txProvider
+            web3Provider.getSigner()
         );
 
-        await contract.addLiquidity(1, ethers.utils.bigNumberify(1).pow(255), 1000000000, {value: amount});
+        await contract.addLiquidity(
+            1,
+            ethers.utils.bigNumberify(1).pow(255),
+            Math.ceil(Date.now() / 1000) + 60 * 15,
+            {value: amount}
+        );
     }
 
-    async withdraw(tokenAddress: string, amount: BigNumber) {
+    async withdraw(tokenAddress: string, walletAddress: string) {
+
+        const web3Provider = new ethers.providers.Web3Provider(
+            this.web3Service.txProvider.currentProvider
+        );
 
         const contract = new ethers.Contract(
             await this.getExchangeAddress(tokenAddress),
             UNISWAP_ABI,
-            this.web3Service.txProvider
+            web3Provider.getSigner()
         );
 
-        await contract.removeLiquidity(amount, 0, 0, 1000000000);
+        await contract.removeLiquidity(
+            await this.getBalance(tokenAddress, walletAddress),
+            0,
+            0,
+            Math.ceil(Date.now() / 1000) + 60 * 15
+        );
     }
 }
