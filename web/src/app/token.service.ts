@@ -1394,7 +1394,14 @@ export class TokenService {
             icon: '',
             decimals: 18,
             address: '0x7d1afa7b718fb893db30a3abc0cfc608aacfebb0'
-        }
+        },
+        cETH: {
+            symbol: 'cETH',
+            name: 'Compound ETH (cETH)',
+            icon: '',
+            decimals: 8,
+            address: '0x4ddc2d193948926d02f9b1fe9e1daa0718270ed5'
+        },
     };
 
     tokenBalanceAggregatorContract;
