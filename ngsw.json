@@ -1,6 +1,6 @@
 {
   "configVersion": 1,
-  "timestamp": 1564893780033,
+  "timestamp": 1564894382057,
   "index": "/index.html",
   "assetGroups": [
     {
@@ -8,12 +8,12 @@
       "installMode": "prefetch",
       "updateMode": "prefetch",
       "urls": [
-        "/5.2a2eefb059110ca0be16.js",
+        "/5.5c1d733002f86108c2a2.js",
         "/index.html",
         "/main.2c9b4ffe0443930cc660.js",
         "/polyfills-es5.2803ab528cd8c053fddf.js",
         "/polyfills.f3bb8631eadc2f56be60.js",
-        "/runtime.013c1fbdb3548930e974.js",
+        "/runtime.1238eb59806e4fdca46c.js",
         "/styles.c0544b5bf86060629ff1.css"
       ],
       "patterns": []
@@ -87,7 +87,7 @@
   ],
   "dataGroups": [],
   "hashTable": {
-    "/5.2a2eefb059110ca0be16.js": "3e9e6f6778c1d8d4ffa49ba56a1e9e159425fb0a",
+    "/5.5c1d733002f86108c2a2.js": "abff6fc052796d9658e14a319379ff5852d4b52f",
     "/assets/cryptomaniacs.png": "550cf4c6ce74f53a3d5f975f3a0b033bda6de8f8",
     "/assets/ethereum-white.png": "5111f74787b6075ff8b7a17d6b1761d9ac3ae73d",
     "/assets/ethereum.png": "18cde2f547f56bb9609823892395f971e02896be",
@@ -146,11 +146,11 @@
     "/assets/torus.png": "eb1b00459792724a8ec1504e3abd494c55e30efb",
     "/assets/trust-wallet.png": "7fcf5ba66868259c8ddb9526ff15999f62ec25c2",
     "/assets/wallet-connect.png": "405a77eb97c6d08b2f1a6a793e128a607ea2e881",
-    "/index.html": "f1b224daebbcf22be6c4628430d278f2b23dfd87",
+    "/index.html": "77fd873aa12693239406a520f804387755f66d8d",
     "/main.2c9b4ffe0443930cc660.js": "a5805600e368449c9a60abdce59512a08790204a",
     "/polyfills-es5.2803ab528cd8c053fddf.js": "d7b0c33a82127679e2c9860046cbc1bba15c3382",
     "/polyfills.f3bb8631eadc2f56be60.js": "2fbea5ce7d5c44f5ecdafc877db8287d034374dc",
-    "/runtime.013c1fbdb3548930e974.js": "2267502b9754a1007490366fb7d6eda4261d8688",
+    "/runtime.1238eb59806e4fdca46c.js": "1ac634e6e7f8578994bcd4e0b44ba49c9182e81f",
     "/styles.c0544b5bf86060629ff1.css": "0ecebd956242150e7cb9244b42e2e0b5820bd75f"
   },
   "navigationUrls": [
