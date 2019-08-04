@@ -104,7 +104,7 @@ export class CompoundService implements PoolInterface {
             web3Provider.getSigner()
         );
 
-        await contract.mint(
+        return contract.mint(
             amount,
             {
                 gasPrice: this.configurationService.fastGasPrice
@@ -124,7 +124,7 @@ export class CompoundService implements PoolInterface {
             web3Provider.getSigner()
         );
 
-        await contract.redeem(
+        return contract.redeem(
             await this.getBalance(tokenSymbol, walletAddress),
             {
                 gasPrice: this.configurationService.fastGasPrice

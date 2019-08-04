@@ -182,7 +182,7 @@ export class UniswapService implements PoolInterface {
 
         const result = feePercent.mul(365 * 24 * 60 * 60).div(duration).mul(10000).div(1e9).div(1e9).toNumber() / 100;
 
-        console.log('store to cache');
+        // console.log('store to cache');
         this.instanceCache['interest_' + tokenAddress] = result;
         return result;
     }
@@ -195,11 +195,11 @@ export class UniswapService implements PoolInterface {
 
         if (this.instanceCache['interest_' + tokenAddress]) {
 
-            console.log('using interest cache');
+            // console.log('using interest cache');
             interest = this.instanceCache['interest_' + tokenAddress];
         } else {
 
-            console.log('not from cache');
+            // console.log('not from cache');
             interest = await this.interest(tokenAddress);
         }
 
@@ -227,7 +227,7 @@ export class UniswapService implements PoolInterface {
         const daiBalance = await this.tokenService.getTokenBalanceByAddress(tokenAddress, exchangeAddress);
         const ethBalance = await this.web3Service.provider.getBalance(exchangeAddress);
 
-        await contract.addLiquidity(
+        return contract.addLiquidity(
             1,
             ethers.utils.bigNumberify(2).pow(255),
             Math.ceil(Date.now() / 1000) + 60 * 15,
@@ -250,7 +250,7 @@ export class UniswapService implements PoolInterface {
             web3Provider.getSigner()
         );
 
-        await contract.removeLiquidity(
+        return contract.removeLiquidity(
             await this.getBalance(tokenAddress, walletAddress),
             1,
             1,

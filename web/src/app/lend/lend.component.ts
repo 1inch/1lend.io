@@ -374,12 +374,15 @@ export class LendComponent implements OnInit {
 
         try {
 
-            await this.poolsService.withdraw(
+            const tx = await this.poolsService.withdraw(
                 pool,
                 this.fromToken
             );
 
             this.onChangeEvent(this.getRequestIdentifier(), true);
+
+            this.done = true;
+            this.transactionHash = tx.hash;
 
         } catch (e) {
 
@@ -398,13 +401,18 @@ export class LendComponent implements OnInit {
 
         try {
 
-            await this.poolsService.deposit(
+            const tx = await this.poolsService.deposit(
                 pool,
                 this.fromToken,
                 this.fromTokenAmount
             );
 
             this.onChangeEvent(this.getRequestIdentifier(), true);
+
+            // console.log('tx', tx);
+
+            this.done = true;
+            this.transactionHash = tx.hash;
 
         } catch (e) {
 
