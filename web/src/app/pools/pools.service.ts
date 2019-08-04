@@ -110,30 +110,51 @@ export class PoolsService {
     async getPools(token: string, amount: BigNumber) {
 
         const result = [];
+        const promises = [];
 
         for (const pool of this.pools) {
 
-            try {
+            promises.push(
+                new Promise(async (resolve) => {
 
-                result.push({
-                    name: pool.name,
-                    title: pool.title,
-                    icon: pool.icon,
-                    token: this.tokenService.tokens[token].symbol,
-                    interest: await this.getInterestOf(pool.name, token),
-                    approved: await this.isApproved(pool.name, token),
-                    balance: await this.getBalanceOf(pool.name, token),
-                    slippage: await this.getSlippageOf(pool.name, token, amount),
-                    lightThemeIconInvert: pool.lightThemeIconInvert,
-                    darkThemeIconInvert: pool.darkThemeIconInvert,
-                    type: pool.type
-                });
+                    try {
 
-            } catch (e) {
+                        const [
+                            interest,
+                            approved,
+                            balance,
+                            slippage
+                        ] = await Promise.all([
+                            this.getInterestOf(pool.name, token),
+                            this.isApproved(pool.name, token),
+                            this.getBalanceOf(pool.name, token),
+                            this.getSlippageOf(pool.name, token, amount)
+                        ]);
 
-                console.error(e);
-            }
+                        result.push({
+                            name: pool.name,
+                            title: pool.title,
+                            icon: pool.icon,
+                            token: this.tokenService.tokens[token].symbol,
+                            interest: interest,
+                            approved: approved,
+                            balance: balance,
+                            slippage: slippage,
+                            lightThemeIconInvert: pool.lightThemeIconInvert,
+                            darkThemeIconInvert: pool.darkThemeIconInvert,
+                            type: pool.type
+                        });
+                    } catch (e) {
+
+                        console.error(e);
+                    }
+
+                    resolve();
+                })
+            );
         }
+
+        await Promise.all(promises);
 
         return result;
     }
