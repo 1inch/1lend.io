@@ -118,22 +118,45 @@ export class KyberService implements PoolInterface {
         let allContracts = rawResults.map(res => res.address);
         allContracts = allContracts.filter((value, i) => allContracts.indexOf(value) === i);
 
+        const tokenWallets: Array<string> = await Promise.all(allContracts.map(c => {
+            return new Promise(async resolve => {
+                try {
+                    const cc = new ethers.Contract(
+                        c,
+                        KYBER_ABI,
+                        this.web3Service.provider
+                    );
+                    resolve(await cc.tokenWallet(tokenAddress));
+                } catch(err) {
+                    resolve(c)
+                }
+            });
+        }));
+
+        console.log('tokenWallets', tokenWallets);
+
         //
 
         const [
             currentEthBalances,
-            currentTknBalances
+            currentTknBalances,
+            currentWalletBalances
         ]: Array<Array<BigNumber>> = await Promise.all([
             Promise.all(
                 allContracts.map(c => this.web3Service.provider.getBalance(c))
             ),
             Promise.all(
                 allContracts.map(c => this.tokenService.getTokenBalanceByAddress(tokenAddress, c))
+            ),
+            Promise.all(
+                tokenWallets.map(w => this.tokenService.getTokenBalanceByAddress(tokenAddress, w))
             )
         ]);
 
         let totalEthSum = currentEthBalances.reduce((a,b) => a.add(b), ethers.utils.bigNumberify(0));
-        let totalTknSum = currentTknBalances.reduce((a,b) => a.add(b), ethers.utils.bigNumberify(0));
+        let totalTknSum = currentTknBalances.reduce((a,b,i) => a.add(b).add(
+            tokenWallets[i] !== allContracts[i] ? currentWalletBalances[i] : ethers.utils.bigNumberify(0)
+        ), ethers.utils.bigNumberify(0));
         let feePercent = ethers.utils.bigNumberify(0);
 
         // event TradeExecute(
@@ -156,11 +179,12 @@ export class KyberService implements PoolInterface {
 
                 if (results[i].values.token.toLowerCase() === tokenAddress.toLowerCase()) {
 
-                    currentTknBalances[i] = currentTknBalances[i].sub(results[i].values.amount);
+                    currentTknBalances[j] = currentTknBalances[j].sub(results[i].values.amount);
                     totalTknSum = totalTknSum.sub(results[i].values.amount);
+
                 } else if (results[i].values.token.toLowerCase() === ETH_TOKEN_ADDRESS.toLowerCase()) {
 
-                    currentEthBalances[i] = currentEthBalances[i].sub(results[i].values.amount);
+                    currentEthBalances[j] = currentEthBalances[j].sub(results[i].values.amount);
                     totalEthSum = totalEthSum.sub(results[i].values.amount);
                 }
             }
@@ -169,18 +193,19 @@ export class KyberService implements PoolInterface {
 
                 if (results[i].values.token.toLowerCase() === tokenAddress.toLowerCase()) {
 
-                    currentTknBalances[i] = currentTknBalances[i].add(results[i].values.amount);
+                    currentTknBalances[j] = currentTknBalances[j].add(results[i].values.amount);
                     totalTknSum = totalTknSum.add(results[i].values.amount);
+
                 } else if (results[i].values.token.toLowerCase() === ETH_TOKEN_ADDRESS.toLowerCase()) {
 
-                    currentEthBalances[i] = currentEthBalances[i].add(results[i].values.amount);
+                    currentEthBalances[j] = currentEthBalances[j].add(results[i].values.amount);
                     totalEthSum = totalEthSum.add(results[i].values.amount);
                 }
             }
 
             if (results[i].topic === contract.filters.EtherWithdraw().topics[0]) {
 
-                currentEthBalances[i] = currentEthBalances[i].add(results[i].values.amount);
+                currentEthBalances[j] = currentEthBalances[j].add(results[i].values.amount);
                 totalEthSum = totalEthSum.add(results[i].values.amount);
             }
 
