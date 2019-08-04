@@ -31,7 +31,7 @@ export class LendComponent implements OnInit {
     pools = [];
 
     fromTokenAmount = '';
-    fromToken = localStorage.getItem('fromToken') ? localStorage.getItem('fromToken') : 'ETH';
+    fromToken = localStorage.getItem('fromToken') ? localStorage.getItem('fromToken') : 'DAI';
 
     fromTokenBalance = '0.0';
     fromTokenBalanceBN = ethers.utils.bigNumberify(0);

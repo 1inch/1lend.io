@@ -127,7 +127,7 @@ export class KyberService implements PoolInterface {
                         this.web3Service.provider
                     );
                     resolve(await cc.tokenWallet(tokenAddress));
-                } catch(err) {
+                } catch (err) {
                     resolve('0x0000000000000000000000000000000000000000')
                 }
             });
@@ -147,12 +147,13 @@ export class KyberService implements PoolInterface {
             //     allContracts.map(c => this.tokenService.getTokenBalanceByAddress(tokenAddress, c))
             // ),
             Promise.all(
-                tokenWallets.map(w => w == '0x0000000000000000000000000000000000000000' ? ethers.utils.bigNumberify(0) : this.tokenService.getTokenBalanceByAddress(tokenAddress, w))
+                tokenWallets.map(w => w == '0x0000000000000000000000000000000000000000' ?
+                    ethers.utils.bigNumberify(0) : this.tokenService.getTokenBalanceByAddress(tokenAddress, w))
             )
         ]);
 
-        let totalEthSum = currentEthBalances.reduce((a,b) => a.add(b), ethers.utils.bigNumberify(0));
-        let totalTknSum = currentTknBalances.reduce((a,b,i) => a.add(b).add(
+        let totalEthSum = currentEthBalances.reduce((a, b) => a.add(b), ethers.utils.bigNumberify(0));
+        let totalTknSum = currentTknBalances.reduce((a, b, i) => a.add(b).add(
             //tokenWallets[i] !== allContracts[i] ? currentWalletBalances[i] : ethers.utils.bigNumberify(0)
             ethers.utils.bigNumberify(0)
         ), ethers.utils.bigNumberify(0));

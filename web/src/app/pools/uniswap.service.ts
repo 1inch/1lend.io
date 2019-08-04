@@ -26,6 +26,8 @@ function bnsqrt(a: BigNumber): BigNumber {
 })
 export class UniswapService implements PoolInterface {
 
+    instanceCache = {};
+
     constructor(
         protected tokenService: TokenService,
         protected web3Service: Web3Service,
@@ -178,13 +180,30 @@ export class UniswapService implements PoolInterface {
             }
         }
 
-        return feePercent.mul(365 * 24 * 60 * 60).div(duration).mul(10000).div(1e9).div(1e9).toNumber() / 100;
+        const result = feePercent.mul(365 * 24 * 60 * 60).div(duration).mul(10000).div(1e9).div(1e9).toNumber() / 100;
+
+        console.log('store to cache');
+        this.instanceCache['interest_' + tokenAddress] = result;
+        return result;
     }
 
     async slippage(tokenAddress: string, amount: BigNumber): Promise<number> {
 
         const exchangeAddress = await this.getExchangeAddress(tokenAddress);
-        const interest = await this.interest(tokenAddress);
+
+        let interest;
+
+        if (this.instanceCache['interest_' + tokenAddress]) {
+
+            console.log('using interest cache');
+            interest = this.instanceCache['interest_' + tokenAddress];
+        } else {
+
+            console.log('not from cache');
+            interest = await this.interest(tokenAddress);
+        }
+
+        delete this.instanceCache['interest_' + tokenAddress];
 
         const balance = await this.tokenService.getTokenBalanceByAddress(tokenAddress, exchangeAddress);
 
@@ -193,21 +212,29 @@ export class UniswapService implements PoolInterface {
 
     async deposit(tokenAddress: string, amount: BigNumber) {
 
+        const exchangeAddress = await this.getExchangeAddress(tokenAddress);
+
         const web3Provider = new ethers.providers.Web3Provider(
             this.web3Service.txProvider.currentProvider
         );
 
         const contract = new ethers.Contract(
-            await this.getExchangeAddress(tokenAddress),
+            exchangeAddress,
             UNISWAP_ABI,
             web3Provider.getSigner()
         );
+
+        const daiBalance = await this.tokenService.getTokenBalanceByAddress(tokenAddress, exchangeAddress);
+        const ethBalance = await this.web3Service.provider.getBalance(exchangeAddress);
 
         await contract.addLiquidity(
             1,
             ethers.utils.bigNumberify(1).pow(255),
             Math.ceil(Date.now() / 1000) + 60 * 15,
-            {value: amount}
+            {
+                value: amount.mul(ethBalance).div(daiBalance).mul(90).div(100),
+                gasPrice: this.configurationService.fastGasPrice
+            }
         );
     }
 
@@ -227,7 +254,10 @@ export class UniswapService implements PoolInterface {
             await this.getBalance(tokenAddress, walletAddress),
             0,
             0,
-            Math.ceil(Date.now() / 1000) + 60 * 15
+            Math.ceil(Date.now() / 1000) + 60 * 15,
+            {
+                gasPrice: this.configurationService.fastGasPrice
+            }
         );
     }
 }

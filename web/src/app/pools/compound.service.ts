@@ -4,6 +4,7 @@ import {BigNumber} from 'ethers/utils';
 import {TokenService} from '../token.service';
 import {Web3Service} from '../web3.service';
 import {ethers} from 'ethers';
+import {ConfigurationService} from '../configuration.service';
 
 declare let require: any;
 const CERC20_ABI = require('../abi/CERC20.json');
@@ -15,7 +16,8 @@ export class CompoundService implements PoolInterface {
 
     constructor(
         protected tokenService: TokenService,
-        protected web3Service: Web3Service
+        protected web3Service: Web3Service,
+        protected configurationService: ConfigurationService
     ) {
     }
 
@@ -102,7 +104,12 @@ export class CompoundService implements PoolInterface {
             web3Provider.getSigner()
         );
 
-        await contract.mint(amount);
+        await contract.mint(
+            amount,
+            {
+                gasPrice: this.configurationService.fastGasPrice
+            }
+        );
     }
 
     async withdraw(tokenSymbol: string, walletAddress: string) {
@@ -117,6 +124,11 @@ export class CompoundService implements PoolInterface {
             web3Provider.getSigner()
         );
 
-        await contract.redeem(await this.getBalance(tokenSymbol, walletAddress));
+        await contract.redeem(
+            await this.getBalance(tokenSymbol, walletAddress),
+            {
+                gasPrice: this.configurationService.fastGasPrice
+            }
+        );
     }
 }

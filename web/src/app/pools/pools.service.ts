@@ -122,13 +122,11 @@ export class PoolsService {
                         const [
                             interest,
                             approved,
-                            balance,
-                            slippage
+                            balance
                         ] = await Promise.all([
                             this.getInterestOf(pool.name, token),
                             this.isApproved(pool.name, token),
-                            this.getBalanceOf(pool.name, token),
-                            this.getSlippageOf(pool.name, token, amount)
+                            this.getBalanceOf(pool.name, token)
                         ]);
 
                         result.push({
@@ -139,7 +137,7 @@ export class PoolsService {
                             interest: interest,
                             approved: approved,
                             balance: balance,
-                            slippage: slippage,
+                            slippage: await this.getSlippageOf(pool.name, token, amount),
                             lightThemeIconInvert: pool.lightThemeIconInvert,
                             darkThemeIconInvert: pool.darkThemeIconInvert,
                             type: pool.type
