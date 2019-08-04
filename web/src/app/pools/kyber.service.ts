@@ -11,6 +11,16 @@ const KYBER_ABI = require('../abi/Kyber.json');
 
 const ETH_TOKEN_ADDRESS = '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee';
 
+function bnsqrt(a: BigNumber): BigNumber {
+    return ethers.utils.bigNumberify(
+        Math.floor(
+            Math.sqrt(
+                Number(a.toString())
+            )
+        )
+    );
+}
+
 @Injectable({
     providedIn: 'root'
 })
@@ -84,37 +94,46 @@ export class KyberService implements PoolInterface {
             this.web3Service.provider
         );
 
+        const delta = 20000;
         const currentBlock = await this.web3Service.provider.getBlockNumber();
-        const rawResult = await this.web3Service.provider.getLogs({
+        const rawResults = await this.web3Service.provider.getLogs({
             address: null,
-            fromBlock: currentBlock - 10000,
+            fromBlock: currentBlock - delta,
             toBlock: currentBlock,
             topics: [
-                contract.filters.TradeExecute().topics[0],
+                [
+                    contract.filters.TradeExecute().topics[0],
+                    contract.filters.DepositToken().topics[0],
+                    contract.filters.TokenWithdraw().topics[0],
+                    contract.filters.EtherWithdraw().topics[0],
+                ]
             ]
         });
 
-        const oldBlock = await this.web3Service.provider.getBlock(currentBlock - 10000);
+        const oldBlock = await this.web3Service.provider.getBlock(currentBlock - delta);
         const newBlock = await this.web3Service.provider.getBlock(currentBlock);
         const duration = newBlock.timestamp - oldBlock.timestamp;
 
-        const results = rawResult.map(res => contract.interface.parseLog(res));
-        const allContracts = results
-            .map(result => result.address)
-            .filters((value, index, self) => self.indexOf(value) === index);
-
-        const totalSum = allContracts
-            .map(addr => this.tokenService.getTokenBalanceByAddress(tokenAddress, addr))
-            .reduce((a, b) => a.add(b), ethers.utils.bigNumberify(0));
+        const results = rawResults.map(res => contract.interface.parseLog(res));
+        let allContracts = rawResults.map(res => res.address);
+        allContracts = allContracts.filter((value, i) => allContracts.indexOf(value) === i);
 
         //
 
-        const currentEthBalances: Array<BigNumber> = await Promise.all(
-            allContracts.map(c => this.web3Service.provider.getBalance(c))
-        );
-        const currentTknBalances: Array<BigNumber> = await Promise.all(
-            allContracts.map(c => this.tokenService.getTokenBalanceByAddress(tokenAddress, c))
-        );
+        const [
+            currentEthBalances,
+            currentTknBalances
+        ]: Array<Array<BigNumber>> = await Promise.all([
+            Promise.all(
+                allContracts.map(c => this.web3Service.provider.getBalance(c))
+            ),
+            Promise.all(
+                allContracts.map(c => this.tokenService.getTokenBalanceByAddress(tokenAddress, c))
+            )
+        ]);
+
+        let totalEthSum = currentEthBalances.reduce((a,b) => a.add(b), ethers.utils.bigNumberify(0));
+        let totalTknSum = currentTknBalances.reduce((a,b) => a.add(b), ethers.utils.bigNumberify(0));
         let feePercent = ethers.utils.bigNumberify(0);
 
         // event TradeExecute(
@@ -128,26 +147,72 @@ export class KyberService implements PoolInterface {
 
         for (let i = results.length - 1; i > 0; i--) {
 
-            const j = allContracts.indexOf(results[i].address);
-
-            if (results[i].values.src == tokenAddress &&
-                results[i].values.destToken === ETH_TOKEN_ADDRESS) {
-                const invariant = currentEthBalances[j].mul(currentTknBalances[j]);
-                currentEthBalances[j] = currentEthBalances[j].add(results[i].values.destAmount);
-                currentTknBalances[j] = currentTknBalances[j].sub(results[i].values.srcAmount);
-                const fee = invariant.sub(currentEthBalances[j].mul(currentTknBalances[j]));
-                feePercent = feePercent.add(fee.mul(1e9).mul(1e9).div(invariant));
+            const j = allContracts.indexOf(rawResults[i].address);
+            if (j == -1) {
+                continue;
             }
 
-            if (results[i].values.src === ETH_TOKEN_ADDRESS &&
-                results[i].values.destToken === tokenAddress) {
-                const invariant = currentEthBalances[j].mul(currentTknBalances[j]);
-                currentEthBalances[j] = currentEthBalances[j].sub(results[i].values.srcAmount);
-                currentTknBalances[j] = currentTknBalances[j].add(results[i].values.destAmount);
-                const fee = invariant.sub(currentEthBalances[j].mul(currentTknBalances[j]));
-                feePercent = feePercent.add(fee.mul(1e9).mul(1e9).div(invariant));
+            if (results[i].topic == contract.filters.DepositToken().topics[0]) {
+
+                if (results[i].values.token.toLowerCase() == tokenAddress.toLowerCase()) {
+
+                    currentTknBalances[i] = currentTknBalances[i].sub(results[i].values.amount);
+                    totalTknSum = totalTknSum.sub(results[i].values.amount);
+                } else if (results[i].values.token.toLowerCase() === ETH_TOKEN_ADDRESS.toLowerCase()) {
+
+                    currentEthBalances[i] = currentEthBalances[i].sub(results[i].values.amount);
+                    totalEthSum = totalEthSum.sub(results[i].values.amount);
+                }
+            }
+
+            if (results[i].topic == contract.filters.TokenWithdraw().topics[0]) {
+
+                if (results[i].values.token.toLowerCase() == tokenAddress.toLowerCase()) {
+
+                    currentTknBalances[i] = currentTknBalances[i].add(results[i].values.amount);
+                    totalTknSum = totalTknSum.add(results[i].values.amount);
+                } else if (results[i].values.token.toLowerCase() === ETH_TOKEN_ADDRESS.toLowerCase()) {
+
+                    currentEthBalances[i] = currentEthBalances[i].add(results[i].values.amount);
+                    totalEthSum = totalEthSum.add(results[i].values.amount);
+                }
+            }
+
+            if (results[i].topic == contract.filters.EtherWithdraw().topics[0]) {
+
+                currentEthBalances[i] = currentEthBalances[i].add(results[i].values.amount);
+                totalEthSum = totalEthSum.add(results[i].values.amount);
+            }
+
+            if (results[i].topic == contract.filters.TradeExecute().topics[0]) {
+
+                if (results[i].values.src.toLowerCase() === tokenAddress.toLowerCase() &&
+                    results[i].values.destToken.toLowerCase() === ETH_TOKEN_ADDRESS.toLowerCase()) {
+
+                    const invariant = currentEthBalances[j].mul(currentTknBalances[j]);
+                    currentEthBalances[j] = currentEthBalances[j].add(results[i].values.destAmount);
+                    currentTknBalances[j] = currentTknBalances[j].sub(results[i].values.srcAmount);
+                    totalEthSum = totalEthSum.add(results[i].values.destAmount);
+                    totalTknSum = totalTknSum.sub(results[i].values.srcAmount);
+                    const fee = invariant.sub(currentEthBalances[j].mul(currentTknBalances[j]));
+                    feePercent = feePercent.add(fee.mul(1e9).mul(1e9).div(totalEthSum.mul(totalTknSum)));
+                }
+
+                if (results[i].values.src.toLowerCase() === ETH_TOKEN_ADDRESS.toLowerCase() &&
+                    results[i].values.destToken.toLowerCase() === tokenAddress.toLowerCase()) {
+
+                    const invariant = currentEthBalances[j].mul(currentTknBalances[j]);
+                    currentEthBalances[j] = currentEthBalances[j].sub(results[i].values.srcAmount);
+                    currentTknBalances[j] = currentTknBalances[j].add(results[i].values.destAmount);
+                    totalEthSum = totalEthSum.sub(results[i].values.srcAmount);
+                    totalTknSum = totalTknSum.add(results[i].values.destAmount);
+                    const fee = invariant.sub(currentEthBalances[j].mul(currentTknBalances[j]));
+                    feePercent = feePercent.add(fee.mul(1e9).mul(1e9).div(totalEthSum.mul(totalTknSum)));
+                }
             }
         }
+
+        console.log('feePercent', feePercent.toString());
 
         return feePercent.mul(365 * 24 * 60 * 60).div(duration).mul(10000).div(1e9).div(1e9).toNumber() / 100;
     }

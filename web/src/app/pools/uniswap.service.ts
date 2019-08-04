@@ -11,6 +11,16 @@ const UNISWAP_ABI = require('../abi/Uniswap.json');
 const UNISWAP_VIEW_ABI = require('../abi/UniswapView.json');
 const UNISWAP_FACTORY_ABI = require('../abi/UniswapFactory.json');
 
+function bnsqrt(a: BigNumber): BigNumber {
+    return ethers.utils.bigNumberify(
+        Math.floor(
+            Math.sqrt(
+                Number(a.toString())
+            )
+        )
+    );
+}
+
 @Injectable({
     providedIn: 'root'
 })
@@ -109,10 +119,11 @@ export class UniswapService implements PoolInterface {
             this.web3Service.provider
         );
 
+        const delta = 20000;
         const currentBlock = await this.web3Service.provider.getBlockNumber();
         const rawResult = await this.web3Service.provider.getLogs({
             address: contract.address,
-            fromBlock: currentBlock - 10000,
+            fromBlock: currentBlock - delta,
             toBlock: currentBlock,
             topics: [
                 [
@@ -124,7 +135,7 @@ export class UniswapService implements PoolInterface {
             ]
         });
 
-        const oldBlock = await this.web3Service.provider.getBlock(currentBlock - 10000);
+        const oldBlock = await this.web3Service.provider.getBlock(currentBlock - delta);
         const newBlock = await this.web3Service.provider.getBlock(currentBlock);
         const duration = newBlock.timestamp - oldBlock.timestamp;
 
@@ -137,16 +148,19 @@ export class UniswapService implements PoolInterface {
         for (let i = results.length - 1; i > 0; i--) {
 
             if (results[i].topic == contract.filters.AddLiquidity().topics[0]) {
+
                 currentEthBalance = currentEthBalance.sub(results[i].values.eth_amount);
                 currentTknBalance = currentTknBalance.sub(results[i].values.token_amount);
             }
 
             if (results[i].topic == contract.filters.RemoveLiquidity().topics[0]) {
+
                 currentEthBalance = currentEthBalance.add(results[i].values.eth_amount);
                 currentTknBalance = currentTknBalance.add(results[i].values.token_amount);
             }
 
             if (results[i].topic == contract.filters.EthPurchase().topics[0]) {
+
                 const invariant = currentEthBalance.mul(currentTknBalance);
                 currentEthBalance = currentEthBalance.add(results[i].values.eth_bought);
                 currentTknBalance = currentTknBalance.sub(results[i].values.tokens_sold);
@@ -155,6 +169,7 @@ export class UniswapService implements PoolInterface {
             }
 
             if (results[i].topic == contract.filters.TokenPurchase().topics[0]) {
+
                 const invariant = currentEthBalance.mul(currentTknBalance);
                 currentEthBalance = currentEthBalance.sub(results[i].values.eth_sold);
                 currentTknBalance = currentTknBalance.add(results[i].values.tokens_bought);
@@ -163,7 +178,7 @@ export class UniswapService implements PoolInterface {
             }
         }
 
-        return feePercent.mul(365*24*60*60).div(duration).mul(10000).div(1e9).div(1e9).toNumber() / 100;
+        return feePercent.mul(365*24*60*60).div(duration).mul(10000).div(1e9).toNumber() / 100;
     }
 
     async slippage(tokenAddress: string, amount: BigNumber): Promise<number> {
