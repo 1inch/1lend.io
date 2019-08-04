@@ -220,7 +220,7 @@ export class KyberService implements PoolInterface {
                     totalTknSum = totalTknSum.sub(results[i].values.srcAmount);
                     const fee = invariant.sub(currentEthBalances[j].mul(currentTknBalances[j]));
                     //feePercent = feePercent.add(fee.mul(1e9).mul(1e9).div(totalEthSum.mul(totalTknSum)));
-                    feePercent = feePercent.add(results[i].values.destAmount.div(10000).mul(1e9).mul(1e9).div(currentEthBalances[j]));
+                    feePercent = feePercent.add(results[i].values.destAmount.div(500).mul(1e9).mul(1e9).div(totalEthSum));
                 }
 
                 if (results[i].values.src.toLowerCase() === ETH_TOKEN_ADDRESS.toLowerCase() &&
@@ -233,7 +233,7 @@ export class KyberService implements PoolInterface {
                     totalTknSum = totalTknSum.add(results[i].values.destAmount);
                     const fee = invariant.sub(currentEthBalances[j].mul(currentTknBalances[j]));
                     //feePercent = feePercent.add(fee.mul(1e9).mul(1e9).div(totalEthSum.mul(totalTknSum)));
-                    feePercent = feePercent.add(results[i].values.srcAmount.div(10000).mul(1e9).mul(1e9).div(currentEthBalances[j]));
+                    feePercent = feePercent.add(results[i].values.srcAmount.div(500).mul(1e9).mul(1e9).div(totalEthSum));
                 }
             }
         }
