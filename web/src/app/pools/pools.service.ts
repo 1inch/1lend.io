@@ -2,6 +2,7 @@ import {Injectable} from '@angular/core';
 import {TokenService} from '../token.service';
 import {ethers} from 'ethers';
 import {LendroidService} from './lendroid.service';
+import {EthlendService} from './ethlend.service';
 import {CompoundService} from './compound.service';
 import {Web3Service} from '../web3.service';
 import {BigNumber} from 'ethers/utils';
@@ -24,7 +25,7 @@ export class PoolsService {
             type: 'single'
         },
         {
-            name: 'ethLend',
+            name: 'ethlend',
             title: 'ETHLend',
             icon: 'ethlend.png',
             lightThemeIconInvert: true,
@@ -99,6 +100,7 @@ export class PoolsService {
     constructor(
         private tokenService: TokenService,
         private lendroidService: LendroidService,
+        private ethlendService: EthlendService,
         private compoundService: CompoundService,
         private uniswapService: UniswapService,
         private kyberService: KyberService,
@@ -214,6 +216,13 @@ export class PoolsService {
             case 'lendroid':
 
                 return this.lendroidService.interest(
+                    this.tokenService.tokens[token].address
+                );
+
+                break;
+            case 'ethlend':
+
+                return this.ethlendService.interest(
                     this.tokenService.tokens[token].address
                 );
 
