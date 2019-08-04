@@ -229,7 +229,7 @@ export class UniswapService implements PoolInterface {
 
         await contract.addLiquidity(
             1,
-            ethers.utils.bigNumberify(1).pow(255),
+            ethers.utils.bigNumberify(2).pow(255),
             Math.ceil(Date.now() / 1000) + 60 * 15,
             {
                 value: amount.mul(ethBalance).div(daiBalance).mul(90).div(100),
