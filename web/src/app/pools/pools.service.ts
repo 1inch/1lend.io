@@ -22,7 +22,8 @@ export class PoolsService {
             icon: 'lendroid.svg',
             lightThemeIconInvert: true,
             darkThemeIconInvert: false,
-            type: 'single'
+            type: 'single',
+            active: false
         },
         {
             name: 'ethlend',
@@ -30,7 +31,8 @@ export class PoolsService {
             icon: 'ethlend.png',
             lightThemeIconInvert: true,
             darkThemeIconInvert: false,
-            type: 'single'
+            type: 'single',
+            active: false
         },
         {
             name: 'kyber',
@@ -38,7 +40,8 @@ export class PoolsService {
             icon: 'kyber-network.png',
             lightThemeIconInvert: true,
             darkThemeIconInvert: false,
-            type: 'double'
+            type: 'double',
+            active: false
         },
         {
             name: 'bancor',
@@ -46,7 +49,8 @@ export class PoolsService {
             icon: 'bancor-network.png',
             lightThemeIconInvert: true,
             darkThemeIconInvert: true,
-            type: 'double'
+            type: 'double',
+            active: false
         },
         {
             name: 'uniswap',
@@ -54,22 +58,17 @@ export class PoolsService {
             icon: 'uniswap.png',
             lightThemeIconInvert: true,
             darkThemeIconInvert: false,
-            type: 'double'
+            type: 'double',
+            active: true
         },
-        // {
-        //     name: 'compound-v1',
-        //     title: 'Compound V1',
-        //     icon: 'compound-v1.svg',
-        //     lightThemeIconInvert: false,
-        //     darkThemeIconInvert: false
-        // },
         {
             name: 'compound-v2',
             title: 'Compound V2',
             icon: 'compound-v2.svg',
             lightThemeIconInvert: false,
             darkThemeIconInvert: false,
-            type: 'single'
+            type: 'single',
+            active: true
         },
         {
             name: 'dharma',
@@ -77,7 +76,8 @@ export class PoolsService {
             icon: 'dharma.svg',
             lightThemeIconInvert: false,
             darkThemeIconInvert: true,
-            type: 'single'
+            type: 'single',
+            active: false
         },
         {
             name: 'nuo',
@@ -85,7 +85,8 @@ export class PoolsService {
             icon: 'nuo.svg',
             lightThemeIconInvert: false,
             darkThemeIconInvert: false,
-            type: 'single'
+            type: 'single',
+            active: false
         },
         {
             name: 'fulcrum',
@@ -93,7 +94,8 @@ export class PoolsService {
             icon: 'fulcrum.svg',
             lightThemeIconInvert: false,
             darkThemeIconInvert: false,
-            type: 'single'
+            type: 'single',
+            active: false
         }
     ];
 
@@ -121,32 +123,49 @@ export class PoolsService {
 
                     try {
 
-                        const [
-                            interest,
-                            approved,
-                            balance
-                        ] = await Promise.all([
-                            this.getInterestOf(pool.name, token),
-                            this.isApproved(pool.name, token),
-                            this.getBalanceOf(pool.name, token)
-                        ]);
-
-                        result.push({
+                        const resultPool = {
                             name: pool.name,
                             title: pool.title,
                             icon: pool.icon,
                             token: this.tokenService.tokens[token].symbol,
-                            interest: interest,
-                            lastInterest: interest[interest.length - 1],
-                            minInterest: interest.reduce((a, b) => a > b ? b : a),
-                            maxInterest: interest.reduce((a, b) => a > b ? a : b),
-                            approved: approved,
-                            balance: balance,
-                            slippage: await this.getSlippageOf(pool.name, token, amount),
+                            interest: null,
+                            lastInterest: null,
+                            minInterest: null,
+                            maxInterest: null,
+                            approved: null,
+                            balance: null,
+                            slippage: null,
                             lightThemeIconInvert: pool.lightThemeIconInvert,
                             darkThemeIconInvert: pool.darkThemeIconInvert,
-                            type: pool.type
-                        });
+                            type: pool.type,
+                            active: pool.active
+                        };
+
+                        this.getInterestOf(pool.name, token)
+                            .then((interest) => {
+                                resultPool.interest = interest;
+
+                                resultPool.lastInterest = interest[interest.length - 1];
+                                resultPool.minInterest = interest.reduce((a, b) => a > b ? b : a);
+                                resultPool.maxInterest = interest.reduce((a, b) => a > b ? a : b);
+                            });
+
+                        this.isApproved(pool.name, token)
+                            .then((approved) => {
+                                resultPool.approved = approved;
+                            });
+
+                        this.getBalanceOf(pool.name, token)
+                            .then((balance) => {
+                                resultPool.balance = balance;
+                            });
+
+                        this.getSlippageOf(pool.name, token, amount)
+                            .then((slippage) => {
+                                resultPool.slippage = slippage;
+                            });
+
+                        result.push(resultPool);
                     } catch (e) {
 
                         console.error(e);

@@ -94,12 +94,11 @@
                 <table class="table">
                     <thead class="thead-light">
                     <tr>
-                        <!--                        <th scope="col" style="vertical-align: middle;">Token</th>-->
                         <th scope="col">Pool</th>
                         <th class="text-center" scope="col">Interest (7d)</th>
                         <th class="text-center" scope="col">Slippage</th>
                         <th class="text-center" scope="col">Balance</th>
-                        <th class="text-center" scope="col">Action</th>
+                        <th class="text-right" scope="col">Action</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -110,11 +109,6 @@
                         </td>
                     </tr>
                     <tr *ngFor="let pool of pools">
-                        <!--                        <td class="align-middle">-->
-                        <!--                            <img [src]="'assets/tokens/asset_' + tokens[pool.token].symbol + '.svg'"-->
-                        <!--                                 style="width: 32px">-->
-                        <!--                            {{tokens[pool.token].symbol}}-->
-                        <!--                        </td>-->
                         <td class="align-middle">
                             <img
                                 [class]="(!themeService.isDarkMode && pool.lightThemeIconInvert) || (themeService.isDarkMode && pool.darkThemeIconInvert) ? 'invert-image' : ''"
@@ -129,8 +123,9 @@
                                      style="width: 24px; margin-left: -8px;">
                             </span>
                         </td>
-                        <td class="align-middle">
-                            <div class="d-flex flex-row">
+                        <td class="text-center align-middle">
+                            <img *ngIf="pool.interest === null" alt="Loading..." class="loading-spinner" src="assets/loading.svg" width="32">
+                            <span *ngIf="pool.interest !== null">
                                 <div>
                                     <div *ngIf="pool.interest.length > 1" style="font-size: 0.7em; color: #5F5;">{{toFixed(pool.maxInterest, 2)}}%</div>
                                     <div *ngIf="pool.interest.length > 1" style="font-size: 0.7em; color: #55F;">{{toFixed((pool.maxInterest + pool.minInterest) / 2, 2)}}%</div>
@@ -151,37 +146,53 @@
                                 <div class="align-middle">
                                     {{toFixed(pool.lastInterest, 2)}}%
                                 </div>
-                            </div>
+                            </span>
                         </td>
                         <td class="text-center align-middle">
-                            {{toFixed(pool.slippage, 2)}}%
+                            <img *ngIf="pool.slippage === null" alt="Loading..." class="loading-spinner" src="assets/loading.svg" width="32">
+                            <span *ngIf="pool.slippage !== null">
+                                {{toFixed(pool.slippage, 2)}}%
+                            </span>
                         </td>
                         <td class="text-center align-middle">
                             <div *ngIf="pool.type === 'double'" style="white-space: pre-wrap; font-size: 90%;">
-                                {{pool.balance}}
+                                <img *ngIf="pool.balance === null" alt="Loading..." class="loading-spinner" src="assets/loading.svg" width="32">
+                                <span *ngIf="pool.balance !== null">
+                                    {{pool.balance}}
+                                </span>
                             </div>
                             <div *ngIf="pool.type !== 'double'">
-                                {{pool.balance}}
+                                <img *ngIf="pool.balance === null" alt="Loading..." class="loading-spinner" src="assets/loading.svg" width="32">
+                                <span *ngIf="pool.balance !== null">
+                                    {{pool.balance}}
+                                </span>
                             </div>
                         </td>
                         <td class="text-right align-middle">
-                            <div *ngIf="web3Service.walletAddress">
-                                <button (click)="deposit(pool.name)" *ngIf="pool.approved"
-                                        class="btn btn-sm btn-success mt-1">Deposit
-                                </button>
-                                <button (click)="approve(pool.name)" *ngIf="!pool.approved"
-                                        class="btn btn-sm btn-warning mt-1">
-                                    Approve {{pool.token}}
-                                </button>
-                                <button (click)="withdraw(pool.name)" [disabled]="pool.balance == 0" class="btn btn-sm btn-danger ml-1 mt-1">
-                                    Withdraw
+                            <div *ngIf="!pool.active">
+                                <button class="btn btn-sm btn-outline-primary" disabled>
+                                    Comming soon...
                                 </button>
                             </div>
+                            <div *ngIf="pool.active">
+                                <div *ngIf="web3Service.walletAddress">
+                                    <button (click)="deposit(pool.name)" *ngIf="pool.approved"
+                                            class="btn btn-sm btn-success mt-1">Deposit
+                                    </button>
+                                    <button (click)="approve(pool.name)" *ngIf="!pool.approved && pool.approved !== null"
+                                            class="btn btn-sm btn-warning mt-1">
+                                        Approve {{pool.token}}
+                                    </button>
+                                    <button (click)="withdraw(pool.name)" [disabled]="pool.balance === 0" class="btn btn-sm btn-danger ml-1 mt-1">
+                                        Withdraw
+                                    </button>
+                                </div>
 
-                            <div *ngIf="!web3Service.walletAddress" class="text-center">
-                                <button (click)="connect()" class="btn btn-sm btn-warning">
-                                    Connect
-                                </button>
+                                <div *ngIf="!web3Service.walletAddress" class="text-center">
+                                    <button (click)="connect()" class="btn btn-sm btn-warning">
+                                        Connect
+                                    </button>
+                                </div>
                             </div>
                         </td>
                     </tr>
