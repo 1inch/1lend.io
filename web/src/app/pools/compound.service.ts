@@ -36,7 +36,7 @@ export class CompoundService implements PoolInterface {
         );
     }
 
-    async interest(tokenSymbol: string): Promise<number> {
+    async interest(tokenSymbol: string): Promise<Array<number>> {
 
         tokenSymbol = 'c' + tokenSymbol;
 
@@ -59,7 +59,9 @@ export class CompoundService implements PoolInterface {
         const annualBorrowRate = blockBorrowRate.mul(365 * 24 * 60 * 60).div(25).mul(2).mul(10000).div(1e9).div(1e9);
         const annualLendRate = annualBorrowRate.mul(totalBorrows).div(totalBorrows.add(cash));
 
-        return Number(ethers.utils.formatUnits(annualLendRate, 2));
+        return [
+            Number(ethers.utils.formatUnits(annualLendRate, 2))
+        ];
     }
 
     async slippage(tokenSymbol: string, amount: BigNumber): Promise<number> {

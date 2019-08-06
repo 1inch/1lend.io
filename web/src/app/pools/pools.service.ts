@@ -137,6 +137,9 @@ export class PoolsService {
                             icon: pool.icon,
                             token: this.tokenService.tokens[token].symbol,
                             interest: interest,
+                            lastInterest: interest[interest.length - 1],
+                            minInterest: interest.reduce((a, b) => a > b ? b : a),
+                            maxInterest: interest.reduce((a, b) => a > b ? a : b),
                             approved: approved,
                             balance: balance,
                             slippage: await this.getSlippageOf(pool.name, token, amount),
@@ -190,7 +193,7 @@ export class PoolsService {
         }
     }
 
-    async getInterestOf(pool: string, token: string) {
+    async getInterestOf(pool: string, token: string): Promise<Array<number>> {
 
         switch (pool) {
             case 'compound-v2':
@@ -226,7 +229,9 @@ export class PoolsService {
 
                 break;
             default:
-                return ethers.utils.bigNumberify(0);
+                return [
+                    0
+                ];
                 break;
         }
     }

@@ -34,14 +34,16 @@ export class EthlendService implements PoolInterface {
         return undefined;
     }
 
-    async interest(tokenSymbol: string): Promise<number> {
+    async interest(tokenSymbol: string): Promise<Array<number>> {
 
         const result = await this.httpClient.get(this.endpoint).toPromise();
         let orders: Array<any> = selectMany(Object.values(result), order => order.collaterals);
         orders = orders.filter(order => order.symbol === tokenSymbol);
         orders = orders.map(order => order.mpr*12).sort();
 
-        return orders.length > 0 ? orders[0] : 0;
+        return [
+            orders.length > 0 ? orders[0] : 0
+        ];
     }
 
     withdraw(tokenAddress: string, walletAddress: string) {

@@ -21,6 +21,38 @@ function bnsqrt(a: BigNumber): BigNumber {
     );
 }
 
+class BNSMA {
+    items: Array<BigNumber> = [];
+    indexes: Array<number> = [];
+    sum: BigNumber = ethers.utils.bigNumberify(0);
+
+    constructor(
+        public length: number
+    ) {
+    }
+
+    push(value: BigNumber, index: number): BigNumber {
+
+        this.sum = this.sum.add(value);
+        this.items.push(value);
+        this.indexes.push(index);
+
+        while (this.indexes.length > 0 &&
+            Math.abs(index - this.indexes[0]) > this.length) {
+
+            this.sum = this.sum.sub(this.items[0]);
+            this.items.splice(0, 1);
+            this.indexes.splice(0, 1);
+        }
+
+        return this.value;
+    }
+
+    get value(): BigNumber {
+        return this.sum.div(this.items.length);
+    }
+}
+
 @Injectable({
     providedIn: 'root'
 })
@@ -113,7 +145,7 @@ export class UniswapService implements PoolInterface {
         return num.toString().match(re)[0];
     }
 
-    async interest(tokenAddress: string): Promise<number> {
+    async interest(tokenAddress: string): Promise<Array<number>> {
 
         const contract = new ethers.Contract(
             await this.getExchangeAddress(tokenAddress),
@@ -121,7 +153,9 @@ export class UniswapService implements PoolInterface {
             this.web3Service.provider
         );
 
-        const delta = 10000;
+        const delta = 7200*7; // 24h*7
+        const points = 42;
+        const movingKoef = 6;
         const currentBlock = await this.web3Service.provider.getBlockNumber();
         const rawResult = await this.web3Service.provider.getLogs({
             address: contract.address,
@@ -137,16 +171,24 @@ export class UniswapService implements PoolInterface {
             ]
         });
 
-        const oldBlock = await this.web3Service.provider.getBlock(currentBlock - delta);
-        const newBlock = await this.web3Service.provider.getBlock(currentBlock);
+        let [
+            oldBlock,
+            newBlock,
+            currentEthBalance,
+            currentTknBalance,
+        ] = await Promise.all([
+            this.web3Service.provider.getBlock(currentBlock - delta),
+            this.web3Service.provider.getBlock(currentBlock),
+            this.web3Service.provider.getBalance(contract.address),
+            this.tokenService.getTokenBalanceByAddress(tokenAddress, contract.address),
+        ]);
+
         const duration = newBlock.timestamp - oldBlock.timestamp;
-
         const results = rawResult.map(res => contract.interface.parseLog(res));
+        let feePercent = new BNSMA(movingKoef * delta / points);
 
-        let currentEthBalance = await this.web3Service.provider.getBalance(contract.address);
-        let currentTknBalance = await this.tokenService.getTokenBalanceByAddress(tokenAddress, contract.address);
-        let feePercent = ethers.utils.bigNumberify(0);
-
+        let averages = [];
+        let lastAddedBlock = currentBlock;
         for (let i = results.length - 1; i > 0; i--) {
 
             if (results[i].topic === contract.filters.AddLiquidity().topics[0]) {
@@ -167,7 +209,7 @@ export class UniswapService implements PoolInterface {
                 currentEthBalance = currentEthBalance.add(results[i].values.eth_bought);
                 currentTknBalance = currentTknBalance.sub(results[i].values.tokens_sold);
                 const fee = invariant.sub(currentEthBalance.mul(currentTknBalance));
-                feePercent = feePercent.add(fee.mul(1e9).mul(1e9).div(invariant));
+                feePercent.push(fee.mul(1e9).mul(1e9).div(invariant), rawResult[i].blockNumber);
             }
 
             if (results[i].topic === contract.filters.TokenPurchase().topics[0]) {
@@ -176,15 +218,24 @@ export class UniswapService implements PoolInterface {
                 currentEthBalance = currentEthBalance.sub(results[i].values.eth_sold);
                 currentTknBalance = currentTknBalance.add(results[i].values.tokens_bought);
                 const fee = invariant.sub(currentEthBalance.mul(currentTknBalance));
-                feePercent = feePercent.add(fee.mul(1e9).mul(1e9).div(invariant));
+                feePercent.push(fee.mul(1e9).mul(1e9).div(invariant), rawResult[i].blockNumber);
+            }
+
+            if ((lastAddedBlock - rawResult[i].blockNumber) > delta / points) {
+
+                const result = feePercent.sum.div(movingKoef)
+                    .mul(365 * 24 * 60 * 60)
+                    .div(Math.floor(duration / points))
+                    .mul(10000).div(1e9).div(1e9).toNumber() / 100;
+
+                averages.push(result);
+                lastAddedBlock = rawResult[i].blockNumber;
             }
         }
 
-        const result = feePercent.mul(365 * 24 * 60 * 60).div(duration).mul(10000).div(1e9).div(1e9).toNumber() / 100;
-
         // console.log('store to cache');
-        this.instanceCache['interest_' + tokenAddress] = result;
-        return result;
+        this.instanceCache['interest_' + tokenAddress] = averages.reduce((a,b) => a+b) / averages.length;
+        return averages.reverse();
     }
 
     async slippage(tokenAddress: string, amount: BigNumber): Promise<number> {

@@ -96,7 +96,7 @@
                     <tr>
                         <!--                        <th scope="col" style="vertical-align: middle;">Token</th>-->
                         <th scope="col">Pool</th>
-                        <th class="text-center" scope="col">Interest</th>
+                        <th class="text-center" scope="col">Interest (7d)</th>
                         <th class="text-center" scope="col">Slippage</th>
                         <th class="text-center" scope="col">Balance</th>
                         <th class="text-center" scope="col">Action</th>
@@ -129,8 +129,27 @@
                                      style="width: 24px; margin-left: -8px;">
                             </span>
                         </td>
-                        <td class="text-center align-middle">
-                            {{toFixed(pool.interest, 2)}}%
+                        <td class="align-middle">
+                            <div class="d-flex flex-row">
+                                <div *ngIf="pool.interest.length > 1" class="align-middle">
+                                    <ngx-trend
+                                        smooth="true"
+                                        [data]="pool.interest"
+                                        [gradient]="['#00c6ff', '#F0F', '#FF0']"
+                                        radius="10"
+                                        strokeWidth="1"
+                                        strokeLinecap="round"
+                                        width="224"
+                                        height="56">
+                                    </ngx-trend>
+                                </div>
+                                <div *ngIf="pool.interest.length <= 1" style="min-width: 224; min-height: 56;"></div>
+                                <div>
+                                    <div class="text-info" *ngIf="pool.interest.length > 1" style="font-size: 0.7em; opacity: 0.6;">{{toFixed(pool.maxInterest, 2)}}%</div>
+                                    <div>{{toFixed(pool.lastInterest, 2)}}%</div>
+                                    <div class="text-info" *ngIf="pool.interest.length > 1" style="font-size: 0.7em; opacity: 0.6;">{{toFixed(pool.minInterest, 2)}}%</div>
+                                </div>
+                            </div>
                         </td>
                         <td class="text-center align-middle">
                             {{toFixed(pool.slippage, 2)}}%

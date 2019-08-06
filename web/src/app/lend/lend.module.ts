@@ -7,6 +7,7 @@ import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {CollapseModule, TooltipModule} from 'ngx-bootstrap';
 import {LendRoutingModule} from './lend-routing.module';
 import {LoadingSpinnerModule} from '../loading-spinner/loading-spinner.module';
+import {TrendModule} from 'ngx-trend';
 
 @NgModule({
     declarations: [LendComponent],
@@ -21,6 +22,7 @@ import {LoadingSpinnerModule} from '../loading-spinner/loading-spinner.module';
         TooltipModule.forRoot(),
         CollapseModule.forRoot(),
         LoadingSpinnerModule,
+        TrendModule,
     ]
 })
 export class LendModule {

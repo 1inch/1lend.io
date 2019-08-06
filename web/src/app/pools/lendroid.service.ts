@@ -27,7 +27,7 @@ export class LendroidService implements PoolInterface {
         return undefined;
     }
 
-    async interest(tokenSymbol: string): Promise<number> {
+    async interest(tokenSymbol: string): Promise<Array<number>> {
 
         const result = (await this.httpClient.get(this.endpoint).toPromise())['result'];
         let orders: Array<any> = Object.values(result);
@@ -35,7 +35,7 @@ export class LendroidService implements PoolInterface {
         orders = orders.map(order => Number(order.interestRatePerDay));
         orders = orders.sort();
 
-        return orders[0];
+        return orders.slice(0,10);
     }
 
     withdraw(tokenAddress: string, walletAddress: string) {

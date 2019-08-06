@@ -86,7 +86,7 @@ export class KyberService implements PoolInterface {
         return num.toString().match(re)[0];
     }
 
-    async interest(tokenAddress: string): Promise<number> {
+    async interest(tokenAddress: string): Promise<Array<number>> {
 
         const contract = new ethers.Contract(
             '0x0000000000000000000000000000000000000000',
@@ -94,7 +94,7 @@ export class KyberService implements PoolInterface {
             this.web3Service.provider
         );
 
-        const delta = 20000;
+        const delta = 10000;
         const currentBlock = await this.web3Service.provider.getBlockNumber();
         const rawResults = await this.web3Service.provider.getLogs({
             address: null,
@@ -239,7 +239,9 @@ export class KyberService implements PoolInterface {
             }
         }
 
-        return feePercent.mul(365 * 24 * 60 * 60).div(duration).mul(10000).div(1e9).div(1e9).toNumber() / 100;
+        return [
+            feePercent.mul(365 * 24 * 60 * 60).div(duration).mul(10000).div(1e9).div(1e9).toNumber() / 100
+        ];
     }
 
     async slippage(tokenAddress: string, amount: BigNumber): Promise<number> {

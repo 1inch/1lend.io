@@ -494,7 +494,7 @@ export class LendComponent implements OnInit {
 
         this.pools = pools.sort((firstEl, secondEl) => {
 
-            return secondEl['interest'] - firstEl['interest'];
+            return secondEl['lastInterest'] - firstEl['lastInterest'];
         });
 
         return true;
