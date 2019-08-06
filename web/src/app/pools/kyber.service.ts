@@ -103,9 +103,9 @@ export class KyberService implements PoolInterface {
             topics: [
                 [
                     contract.filters.TradeExecute().topics[0],
-                    contract.filters.DepositToken().topics[0],
-                    contract.filters.TokenWithdraw().topics[0],
-                    contract.filters.EtherWithdraw().topics[0],
+                    // contract.filters.DepositToken().topics[0],
+                    // contract.filters.TokenWithdraw().topics[0],
+                    // contract.filters.EtherWithdraw().topics[0],
                 ]
             ]
         });

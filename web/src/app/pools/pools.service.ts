@@ -221,7 +221,7 @@ export class PoolsService {
             case 'ethlend':
 
                 return this.ethlendService.interest(
-                    this.tokenService.tokens[token].address
+                    token
                 );
 
                 break;
