@@ -1,6 +1,6 @@
 {
   "configVersion": 1,
-  "timestamp": 1565125787867,
+  "timestamp": 1565127887653,
   "index": "/index.html",
   "assetGroups": [
     {
@@ -8,12 +8,12 @@
       "installMode": "prefetch",
       "updateMode": "prefetch",
       "urls": [
-        "/5.0a5e9c6ad4ebb6f5d892.js",
+        "/5.05e83a39ae1c1f2b52dd.js",
         "/index.html",
-        "/main.6d80b23d8ebfb102e48b.js",
+        "/main.ccc5540f74d1c36b1017.js",
         "/polyfills-es5.2803ab528cd8c053fddf.js",
         "/polyfills.f3bb8631eadc2f56be60.js",
-        "/runtime.336771b4ec6be41fa8ba.js",
+        "/runtime.88e59594082c9a636481.js",
         "/styles.c0544b5bf86060629ff1.css"
       ],
       "patterns": []
@@ -87,7 +87,7 @@
   ],
   "dataGroups": [],
   "hashTable": {
-    "/5.0a5e9c6ad4ebb6f5d892.js": "06bf957b3b1c6884436ae0e45057ba2e64c5f9b7",
+    "/5.05e83a39ae1c1f2b52dd.js": "65abe3a48e1ed70e56100520e04959d21d1c166a",
     "/assets/cryptomaniacs.png": "550cf4c6ce74f53a3d5f975f3a0b033bda6de8f8",
     "/assets/ethereum-white.png": "5111f74787b6075ff8b7a17d6b1761d9ac3ae73d",
     "/assets/ethereum.png": "18cde2f547f56bb9609823892395f971e02896be",
@@ -146,11 +146,11 @@
     "/assets/torus.png": "eb1b00459792724a8ec1504e3abd494c55e30efb",
     "/assets/trust-wallet.png": "7fcf5ba66868259c8ddb9526ff15999f62ec25c2",
     "/assets/wallet-connect.png": "405a77eb97c6d08b2f1a6a793e128a607ea2e881",
-    "/index.html": "04d95ee53492b8915341920b0e5bffd13c425753",
-    "/main.6d80b23d8ebfb102e48b.js": "cfb23f2aec4455b4d98f7914a8d8e8e4651e7583",
+    "/index.html": "d20306c63a525028fadd9921b47d4337829b4cfe",
+    "/main.ccc5540f74d1c36b1017.js": "1402bfac7b3f0661e17e5a6d64df24d40b4be1ba",
     "/polyfills-es5.2803ab528cd8c053fddf.js": "d7b0c33a82127679e2c9860046cbc1bba15c3382",
     "/polyfills.f3bb8631eadc2f56be60.js": "2fbea5ce7d5c44f5ecdafc877db8287d034374dc",
-    "/runtime.336771b4ec6be41fa8ba.js": "dc69028f511464cd161ba57b4fbd73bcb9376a2b",
+    "/runtime.88e59594082c9a636481.js": "23172b0008bb70154efee3a07e8269a207ef120a",
     "/styles.c0544b5bf86060629ff1.css": "0ecebd956242150e7cb9244b42e2e0b5820bd75f"
   },
   "navigationUrls": [
