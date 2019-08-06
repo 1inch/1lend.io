@@ -118,6 +118,11 @@ export class PoolsService {
 
         for (const pool of this.pools) {
 
+            if (pool.name === 'uniswap' && token === 'ETH') {
+
+                continue;
+            }
+
             promises.push(
                 new Promise(async (resolve) => {
 
