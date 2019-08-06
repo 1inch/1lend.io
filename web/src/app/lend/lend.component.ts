@@ -269,19 +269,15 @@ export class LendComponent implements OnInit {
 
         this.dataLoading = true;
 
-        // this.fromTokenAmountControl.setValue('0.0');
-        // this.fromTokenBalance = '0.0';
-        // this.fromTokenBalanceBN = ethers.utils.bigNumberify(0);
-
         await this.loadTokenBalance();
 
-        if (this.fromTokenBalance === '0.0') {
+        if (
+            this.fromTokenBalance === '0.0' &&
+            this.fromTokenAmount === '0.0'
+        ) {
 
-            if (this.fromTokenAmount === '0.0') {
-
-                this.fromTokenAmountControl.setValue('1.0');
-            }
-        } else {
+            this.fromTokenAmountControl.setValue('1.0');
+        } else if (this.fromTokenAmount === '1.0') {
 
             this.fromTokenAmountControl.setValue(this.fromTokenBalance);
         }

@@ -94,12 +94,11 @@
                 <table class="table">
                     <thead class="thead-light">
                     <tr>
-                        <!--                        <th scope="col" style="vertical-align: middle;">Token</th>-->
                         <th scope="col">Pool</th>
                         <th class="text-center" scope="col">Interest</th>
                         <th class="text-center" scope="col">Slippage</th>
                         <th class="text-center" scope="col">Balance</th>
-                        <th class="text-center" scope="col">Action</th>
+                        <th class="text-right" scope="col">Action</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -110,11 +109,6 @@
                         </td>
                     </tr>
                     <tr *ngFor="let pool of pools">
-                        <!--                        <td class="align-middle">-->
-                        <!--                            <img [src]="'assets/tokens/asset_' + tokens[pool.token].symbol + '.svg'"-->
-                        <!--                                 style="width: 32px">-->
-                        <!--                            {{tokens[pool.token].symbol}}-->
-                        <!--                        </td>-->
                         <td class="align-middle">
                             <img
                                 [class]="(!themeService.isDarkMode && pool.lightThemeIconInvert) || (themeService.isDarkMode && pool.darkThemeIconInvert) ? 'invert-image' : ''"
