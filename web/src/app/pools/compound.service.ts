@@ -25,7 +25,13 @@ export class CompoundService implements PoolInterface {
 
         tokenSymbol = 'c' + tokenSymbol;
 
-        return this.tokenService.getTokenBalance(tokenSymbol, walletAddress);
+        const contract = new ethers.Contract(
+            this.tokenService.tokens[tokenSymbol].address,
+            CERC20_ABI,
+            this.web3Service.provider
+        );
+
+        return contract.balanceOfUnderlying(walletAddress);
     }
 
     async getFormatedBalance(tokenSymbol: string, walletAddress: string): Promise<string> {
