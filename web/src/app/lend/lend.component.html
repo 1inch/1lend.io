@@ -95,7 +95,7 @@
                     <thead class="thead-light">
                     <tr>
                         <th scope="col">Pool</th>
-                        <th class="text-center" scope="col">Interest (7d)</th>
+                        <th class="text-left" scope="col">Interest (7d)</th>
                         <th class="text-center" scope="col">Slippage</th>
                         <th class="text-center" scope="col">Balance</th>
                         <th class="text-right" scope="col">Action</th>
@@ -123,7 +123,7 @@
                                      style="width: 24px; margin-left: -8px;">
                             </span>
                         </td>
-                        <td class="text-center align-middle">
+                        <td class="text-left align-middle">
                             <img *ngIf="pool.interest === null" alt="Loading..." class="loading-spinner" src="assets/loading.svg" width="32">
                             <div *ngIf="pool.interest !== null" class="d-flex flex-row">
                                 <div>
