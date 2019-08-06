@@ -156,23 +156,30 @@
                             </div>
                         </td>
                         <td class="text-right align-middle">
-                            <div *ngIf="web3Service.walletAddress">
-                                <button (click)="deposit(pool.name)" *ngIf="pool.approved"
-                                        class="btn btn-sm btn-success mt-1">Deposit
-                                </button>
-                                <button (click)="approve(pool.name)" *ngIf="!pool.approved && pool.approved !== null"
-                                        class="btn btn-sm btn-warning mt-1">
-                                    Approve {{pool.token}}
-                                </button>
-                                <button (click)="withdraw(pool.name)" [disabled]="pool.balance === 0" class="btn btn-sm btn-danger ml-1 mt-1">
-                                    Withdraw
+                            <div *ngIf="!pool.active">
+                                <button class="btn btn-sm btn-outline-primary" disabled>
+                                    Comming soon...
                                 </button>
                             </div>
+                            <div *ngIf="pool.active">
+                                <div *ngIf="web3Service.walletAddress">
+                                    <button (click)="deposit(pool.name)" *ngIf="pool.approved"
+                                            class="btn btn-sm btn-success mt-1">Deposit
+                                    </button>
+                                    <button (click)="approve(pool.name)" *ngIf="!pool.approved && pool.approved !== null"
+                                            class="btn btn-sm btn-warning mt-1">
+                                        Approve {{pool.token}}
+                                    </button>
+                                    <button (click)="withdraw(pool.name)" [disabled]="pool.balance === 0" class="btn btn-sm btn-danger ml-1 mt-1">
+                                        Withdraw
+                                    </button>
+                                </div>
 
-                            <div *ngIf="!web3Service.walletAddress" class="text-center">
-                                <button (click)="connect()" class="btn btn-sm btn-warning">
-                                    Connect
-                                </button>
+                                <div *ngIf="!web3Service.walletAddress" class="text-center">
+                                    <button (click)="connect()" class="btn btn-sm btn-warning">
+                                        Connect
+                                    </button>
+                                </div>
                             </div>
                         </td>
                     </tr>

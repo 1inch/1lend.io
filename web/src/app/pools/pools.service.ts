@@ -22,7 +22,8 @@ export class PoolsService {
             icon: 'lendroid.svg',
             lightThemeIconInvert: true,
             darkThemeIconInvert: false,
-            type: 'single'
+            type: 'single',
+            active: false
         },
         {
             name: 'ethlend',
@@ -30,7 +31,8 @@ export class PoolsService {
             icon: 'ethlend.png',
             lightThemeIconInvert: true,
             darkThemeIconInvert: false,
-            type: 'single'
+            type: 'single',
+            active: false
         },
         {
             name: 'kyber',
@@ -38,7 +40,8 @@ export class PoolsService {
             icon: 'kyber-network.png',
             lightThemeIconInvert: true,
             darkThemeIconInvert: false,
-            type: 'double'
+            type: 'double',
+            active: false
         },
         {
             name: 'bancor',
@@ -46,7 +49,8 @@ export class PoolsService {
             icon: 'bancor-network.png',
             lightThemeIconInvert: true,
             darkThemeIconInvert: true,
-            type: 'double'
+            type: 'double',
+            active: false
         },
         {
             name: 'uniswap',
@@ -54,22 +58,17 @@ export class PoolsService {
             icon: 'uniswap.png',
             lightThemeIconInvert: true,
             darkThemeIconInvert: false,
-            type: 'double'
+            type: 'double',
+            active: true
         },
-        // {
-        //     name: 'compound-v1',
-        //     title: 'Compound V1',
-        //     icon: 'compound-v1.svg',
-        //     lightThemeIconInvert: false,
-        //     darkThemeIconInvert: false
-        // },
         {
             name: 'compound-v2',
             title: 'Compound V2',
             icon: 'compound-v2.svg',
             lightThemeIconInvert: false,
             darkThemeIconInvert: false,
-            type: 'single'
+            type: 'single',
+            active: true
         },
         {
             name: 'dharma',
@@ -77,7 +76,8 @@ export class PoolsService {
             icon: 'dharma.svg',
             lightThemeIconInvert: false,
             darkThemeIconInvert: true,
-            type: 'single'
+            type: 'single',
+            active: false
         },
         {
             name: 'nuo',
@@ -85,7 +85,8 @@ export class PoolsService {
             icon: 'nuo.svg',
             lightThemeIconInvert: false,
             darkThemeIconInvert: false,
-            type: 'single'
+            type: 'single',
+            active: false
         },
         {
             name: 'fulcrum',
@@ -93,7 +94,8 @@ export class PoolsService {
             icon: 'fulcrum.svg',
             lightThemeIconInvert: false,
             darkThemeIconInvert: false,
-            type: 'single'
+            type: 'single',
+            active: false
         }
     ];
 
@@ -132,7 +134,8 @@ export class PoolsService {
                             slippage: null,
                             lightThemeIconInvert: pool.lightThemeIconInvert,
                             darkThemeIconInvert: pool.darkThemeIconInvert,
-                            type: pool.type
+                            type: pool.type,
+                            active: pool.active
                         };
 
                         this.getInterestOf(pool.name, token)
