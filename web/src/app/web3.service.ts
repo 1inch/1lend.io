@@ -45,9 +45,11 @@ export class Web3Service {
 
     async initWeb3() {
 
+        const oneInch = new ethers.providers.JsonRpcProvider('https://parity.1inch.exchange/rpc');
         const infura = new ethers.providers.InfuraProvider('homestead', this.configurationService.INFURA_KEY);
 
         this.provider = new ethers.providers.FallbackProvider([
+            oneInch,
             infura,
         ]);
 
