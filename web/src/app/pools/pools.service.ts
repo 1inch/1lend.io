@@ -121,29 +121,41 @@ export class PoolsService {
 
                     try {
 
-                        const [
-                            interest,
-                            approved,
-                            balance
-                        ] = await Promise.all([
-                            this.getInterestOf(pool.name, token),
-                            this.isApproved(pool.name, token),
-                            this.getBalanceOf(pool.name, token)
-                        ]);
-
-                        result.push({
+                        const resultPool = {
                             name: pool.name,
                             title: pool.title,
                             icon: pool.icon,
                             token: this.tokenService.tokens[token].symbol,
-                            interest: interest,
-                            approved: approved,
-                            balance: balance,
-                            slippage: await this.getSlippageOf(pool.name, token, amount),
+                            interest: null,
+                            approved: null,
+                            balance: null,
+                            slippage: null,
                             lightThemeIconInvert: pool.lightThemeIconInvert,
                             darkThemeIconInvert: pool.darkThemeIconInvert,
                             type: pool.type
-                        });
+                        };
+
+                        this.getInterestOf(pool.name, token)
+                            .then((interest) => {
+                                resultPool.interest = interest;
+                            });
+
+                        this.isApproved(pool.name, token)
+                            .then((approved) => {
+                                resultPool.approved = approved;
+                            });
+
+                        this.getBalanceOf(pool.name, token)
+                            .then((balance) => {
+                                resultPool.balance = balance;
+                            });
+
+                        this.getSlippageOf(pool.name, token, amount)
+                            .then((slippage) => {
+                                resultPool.slippage = slippage;
+                            });
+
+                        result.push(resultPool);
                     } catch (e) {
 
                         console.error(e);
