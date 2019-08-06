@@ -126,10 +126,10 @@
                         <td class="text-left align-middle">
                             <img *ngIf="pool.interest === null" alt="Loading..." class="loading-spinner" src="assets/loading.svg" width="32">
                             <div *ngIf="pool.interest !== null" class="d-flex flex-row">
-                                <div>
-                                    <div *ngIf="pool.interest.length > 1" style="font-size: 0.7em; color: #5F5;">{{toFixed(pool.maxInterest, 2)}}%</div>
-                                    <div *ngIf="pool.interest.length > 1" style="font-size: 0.7em; color: #55F;">{{toFixed((pool.maxInterest + pool.minInterest) / 2, 2)}}%</div>
-                                    <div *ngIf="pool.interest.length > 1" style="font-size: 0.7em; color: #F55;">{{toFixed(pool.minInterest, 2)}}%</div>
+                                <div *ngIf="pool.interest.length > 1">
+                                    <div style="font-size: 0.7em; color: #5F5;">{{toFixed(pool.maxInterest, 2)}}%</div>
+                                    <div style="font-size: 1.0em; color: #55F;">{{toFixed((pool.maxInterest + pool.minInterest) / 2, 2)}}%</div>
+                                    <div style="font-size: 0.7em; color: #F55;">{{toFixed(pool.minInterest, 2)}}%</div>
                                 </div>
                                 <div *ngIf="pool.interest.length > 1" class="align-middle">
                                     <ngx-trend
