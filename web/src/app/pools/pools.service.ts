@@ -213,6 +213,7 @@ export class PoolsService {
             }
         } catch (e) {
 
+            console.error(e);
             return ethers.utils.bigNumberify(0);
         }
     }

@@ -287,6 +287,10 @@ export class LendComponent implements OnInit {
         this.onChange();
     }
 
+    isArray(value: any): boolean {
+        return Array.isArray(value);
+    }
+
     async loadTokenBalance() {
 
         if (

@@ -97,7 +97,7 @@
                         <th scope="col">Pool</th>
                         <th class="text-left" scope="col">Interest (7d)</th>
                         <th class="text-center" scope="col">Slippage</th>
-                        <th class="text-center" scope="col">Balance</th>
+                        <th class="text-right" scope="col">Balance</th>
                         <th class="text-right" scope="col">Action</th>
                     </tr>
                     </thead>
@@ -116,26 +116,26 @@
                                 class="mr-1"
                                 style="width: 32px">
                             {{pool.title}}
-                            <span *ngIf="pool.type === 'double' && fromToken !== 'ETH'">
+                            <span *ngIf="pool.type === 'double' && fromToken !== 'ETH'" style="white-space: nowrap;">
                                 <img [src]="'assets/tokens/asset_' + (pool.name === 'bancor' ? 'BNT' : 'ETH') + '.svg'"
                                      style="width: 24px">
                                 <img [src]="'assets/tokens/asset_' + tokens[pool.token].symbol + '.svg'"
                                      style="width: 24px; margin-left: -8px;">
                             </span>
                         </td>
-                        <td class="text-left align-middle">
+                        <td class="text-left align-middle" style="min-width: 295px;">
                             <img *ngIf="pool.interest === null" alt="Loading..." class="loading-spinner" src="assets/loading.svg" width="32">
                             <div *ngIf="pool.interest !== null" class="d-flex flex-row">
                                 <div *ngIf="pool.interest.length > 1">
                                     <div style="font-size: 0.7em; color: #5F5;">{{toFixed(pool.maxInterest, 2)}}%</div>
-                                    <div style="font-size: 1.0em; color: #55F;">{{toFixed((pool.maxInterest + pool.minInterest) / 2, 2)}}%</div>
+                                    <div style="font-size: 1.0em; color: #6b66ff;">{{toFixed((pool.maxInterest + pool.minInterest) / 2, 2)}}%</div>
                                     <div style="font-size: 0.7em; color: #F55;">{{toFixed(pool.minInterest, 2)}}%</div>
                                 </div>
                                 <div *ngIf="pool.interest.length > 1" class="align-middle">
                                     <ngx-trend
                                         smooth="true"
                                         [data]="pool.interest"
-                                        [gradient]="['#F55', '#55F', '#5F5']"
+                                        [gradient]="['#F55', '#6b66ff', '#5F5']"
                                         radius="5"
                                         strokeWidth="1"
                                         strokeLinecap="round"
@@ -154,16 +154,35 @@
                                 {{toFixed(pool.slippage, 2)}}%
                             </span>
                         </td>
-                        <td class="text-center align-middle">
+                        <td class="text-right align-middle">
                             <div *ngIf="pool.type === 'double'" style="white-space: pre-wrap; font-size: 90%;">
                                 <img *ngIf="pool.balance === null" alt="Loading..." class="loading-spinner" src="assets/loading.svg" width="32">
                                 <span *ngIf="pool.balance !== null">
-                                    {{pool.balance}}
+                                    <span *ngIf="isArray(pool.balance) && pool.balance.length === 2">
+
+                                        <ng-template #firstTokenTemplate>{{pool.balance[0].symbol}}</ng-template>
+                                        <ng-template #secondTokenTemplate>{{pool.balance[1].symbol}}</ng-template>
+
+                                        {{pool.balance[0].balance}}
+                                        <img [src]="'assets/tokens/asset_' + pool.balance[0].symbol + '.svg'" style="width: 16px" [tooltip]="firstTokenTemplate"><br>
+                                        {{pool.balance[1].balance}}
+                                        <img [src]="'assets/tokens/asset_' + pool.balance[1].symbol + '.svg'" style="width: 16px" [tooltip]="secondTokenTemplate">
+                                    </span>
+                                    <span *ngIf="!isArray(pool.balance)">
+                                        {{pool.balance}}
+                                    </span>
                                 </span>
                             </div>
                             <div *ngIf="pool.type !== 'double'">
                                 <img *ngIf="pool.balance === null" alt="Loading..." class="loading-spinner" src="assets/loading.svg" width="32">
-                                <span *ngIf="pool.balance !== null">
+                                <span *ngIf="isArray(pool.balance)" style="white-space: nowrap;">
+
+                                        <ng-template #tokenTemplate>{{pool.balance[0].symbol}}</ng-template>
+
+                                    {{pool.balance[0].balance}}
+                                    <img [src]="'assets/tokens/asset_' + pool.balance[0].symbol + '.svg'" style="width: 16px" [tooltip]="tokenTemplate">
+                                    </span>
+                                <span *ngIf="!pool.balance !== null && !isArray(pool.balance)">
                                     {{pool.balance}}
                                 </span>
                             </div>

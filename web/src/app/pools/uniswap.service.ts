@@ -31,6 +31,10 @@ class BNSMA {
     ) {
     }
 
+    get value(): BigNumber {
+        return this.sum.div(this.items.length);
+    }
+
     push(value: BigNumber, index: number): BigNumber {
 
         this.sum = this.sum.add(value);
@@ -38,7 +42,7 @@ class BNSMA {
         this.indexes.push(index);
 
         while (this.indexes.length > 0 &&
-            Math.abs(index - this.indexes[0]) > this.length) {
+        Math.abs(index - this.indexes[0]) > this.length) {
 
             this.sum = this.sum.sub(this.items[0]);
             this.items.splice(0, 1);
@@ -46,10 +50,6 @@ class BNSMA {
         }
 
         return this.value;
-    }
-
-    get value(): BigNumber {
-        return this.sum.div(this.items.length);
     }
 }
 
@@ -113,7 +113,7 @@ export class UniswapService implements PoolInterface {
         );
     }
 
-    async getFormatedTokensBalance(tokenSymbol: string, walletAddress: string): Promise<string> {
+    async getFormatedTokensBalance(tokenSymbol: string, walletAddress: string): Promise<any> {
 
         const tokensBalance = await this.getTokensBalance(
             this.tokenService.tokens[tokenSymbol].address,
@@ -128,21 +128,25 @@ export class UniswapService implements PoolInterface {
             ethAmount
         );
 
-        ethFormatedAmount = this.toFixed(ethFormatedAmount, 6);
+        ethFormatedAmount = this.tokenService.toFixed(ethFormatedAmount, 6);
 
         let tokenFormatedAmount = this.tokenService.formatAsset(
             tokenSymbol,
             tokenAmount
         );
 
-        tokenFormatedAmount = this.toFixed(tokenFormatedAmount, 6);
+        tokenFormatedAmount = this.tokenService.toFixed(tokenFormatedAmount, 6);
 
-        return ethFormatedAmount + ' ETH ' + '\n' + tokenFormatedAmount + ' ' + tokenSymbol;
-    }
-
-    toFixed(num, fixed) {
-        const re = new RegExp('^-?\\d+(?:\.\\d{0,' + (fixed || -1) + '})?');
-        return num.toString().match(re)[0];
+        return [
+            {
+                balance: ethFormatedAmount,
+                symbol: 'ETH'
+            },
+            {
+                balance: tokenFormatedAmount,
+                symbol: tokenSymbol
+            }
+        ];
     }
 
     async interest(tokenAddress: string): Promise<Array<number>> {
@@ -153,7 +157,7 @@ export class UniswapService implements PoolInterface {
             this.web3Service.provider
         );
 
-        const delta = 7200*7; // 24h*7
+        const delta = 7200 * 7; // 24h*7
         const points = 42;
         const movingKoef = 6;
         const currentBlock = await this.web3Service.provider.getBlockNumber();
@@ -234,7 +238,7 @@ export class UniswapService implements PoolInterface {
         }
 
         // console.log('store to cache');
-        this.instanceCache['interest_' + tokenAddress] = averages.reduce((a,b) => a+b) / averages.length;
+        this.instanceCache['interest_' + tokenAddress] = averages.reduce((a, b) => a + b) / averages.length;
         return averages.reverse();
     }
 

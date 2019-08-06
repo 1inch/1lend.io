@@ -8,6 +8,7 @@ import {ConfigurationService} from '../configuration.service';
 
 declare let require: any;
 const CERC20_ABI = require('../abi/CERC20.json');
+const CERC20_READ_ONLY_ABI = require('../abi/CERC20ReadOnly.json');
 
 @Injectable({
     providedIn: 'root'
@@ -27,19 +28,27 @@ export class CompoundService implements PoolInterface {
 
         const contract = new ethers.Contract(
             this.tokenService.tokens[tokenSymbol].address,
-            CERC20_ABI,
+            CERC20_READ_ONLY_ABI,
             this.web3Service.provider
         );
 
         return contract.balanceOfUnderlying(walletAddress);
     }
 
-    async getFormatedBalance(tokenSymbol: string, walletAddress: string): Promise<string> {
+    async getFormatedBalance(tokenSymbol: string, walletAddress: string): Promise<any> {
 
-        return this.tokenService.formatAsset(
-            'c' + tokenSymbol,
-            await this.getBalance(tokenSymbol, walletAddress)
-        );
+        return [
+            {
+                balance: this.tokenService.toFixed(
+                    this.tokenService.formatAsset(
+                        tokenSymbol,
+                        await this.getBalance(tokenSymbol, walletAddress)
+                    ),
+                    6
+                ),
+                symbol: tokenSymbol
+            }
+        ];
     }
 
     async interest(tokenSymbol: string): Promise<Array<number>> {
