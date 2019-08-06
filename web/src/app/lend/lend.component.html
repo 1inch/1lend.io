@@ -125,7 +125,7 @@
                         </td>
                         <td class="text-center align-middle">
                             <img *ngIf="pool.interest === null" alt="Loading..." class="loading-spinner" src="assets/loading.svg" width="32">
-                            <span *ngIf="pool.interest !== null">
+                            <div *ngIf="pool.interest !== null" class="d-flex flex-row">
                                 <div>
                                     <div *ngIf="pool.interest.length > 1" style="font-size: 0.7em; color: #5F5;">{{toFixed(pool.maxInterest, 2)}}%</div>
                                     <div *ngIf="pool.interest.length > 1" style="font-size: 0.7em; color: #55F;">{{toFixed((pool.maxInterest + pool.minInterest) / 2, 2)}}%</div>
@@ -146,7 +146,7 @@
                                 <div class="align-middle">
                                     {{toFixed(pool.lastInterest, 2)}}%
                                 </div>
-                            </span>
+                            </div>
                         </td>
                         <td class="text-center align-middle">
                             <img *ngIf="pool.slippage === null" alt="Loading..." class="loading-spinner" src="assets/loading.svg" width="32">
