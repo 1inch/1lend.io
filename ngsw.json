@@ -1,6 +1,6 @@
 {
   "configVersion": 1,
-  "timestamp": 1565128158902,
+  "timestamp": 1565128415089,
   "index": "/index.html",
   "assetGroups": [
     {
@@ -10,7 +10,7 @@
       "urls": [
         "/5.16c9a2b3780fae91c87b.js",
         "/index.html",
-        "/main.ccc5540f74d1c36b1017.js",
+        "/main.086aba0978991801d059.js",
         "/polyfills-es5.2803ab528cd8c053fddf.js",
         "/polyfills.f3bb8631eadc2f56be60.js",
         "/runtime.163e81fd237aeb98029b.js",
@@ -146,8 +146,8 @@
     "/assets/torus.png": "eb1b00459792724a8ec1504e3abd494c55e30efb",
     "/assets/trust-wallet.png": "7fcf5ba66868259c8ddb9526ff15999f62ec25c2",
     "/assets/wallet-connect.png": "405a77eb97c6d08b2f1a6a793e128a607ea2e881",
-    "/index.html": "ff8bfb7fbb8b5e36b0590047fd815d14feb67980",
-    "/main.ccc5540f74d1c36b1017.js": "1402bfac7b3f0661e17e5a6d64df24d40b4be1ba",
+    "/index.html": "7baa20f75ddb0b793ec27357633d590bba3165cc",
+    "/main.086aba0978991801d059.js": "3fade83676723c2cc8a89153800a44c40aaedcb5",
     "/polyfills-es5.2803ab528cd8c053fddf.js": "d7b0c33a82127679e2c9860046cbc1bba15c3382",
     "/polyfills.f3bb8631eadc2f56be60.js": "2fbea5ce7d5c44f5ecdafc877db8287d034374dc",
     "/runtime.163e81fd237aeb98029b.js": "dd8bcff35cbe26e034ac7ea44652ddc18aa69c45",
