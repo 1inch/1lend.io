@@ -43,6 +43,8 @@ export class LendComponent implements OnInit {
     fromTokenSearchControl = new FormControl('');
     fromTokenAmountControl = new FormControl('');
 
+    sortInterval = null;
+
     @ViewChild('fromTokenDropDown', {static: false})
     fromTokenDropDown: NgbDropdown;
 
@@ -492,10 +494,18 @@ export class LendComponent implements OnInit {
             return false;
         }
 
-        this.pools = pools.sort((firstEl, secondEl) => {
+        if (this.sortInterval !== null) {
 
-            return secondEl['interest'] - firstEl['interest'];
-        });
+            clearInterval(this.sortInterval);
+        }
+
+        this.sortInterval = setInterval(() => {
+
+            this.pools = pools.sort((firstEl, secondEl) => {
+
+                return secondEl['interest'] - firstEl['interest'];
+            });
+        }, 1000);
 
         return true;
     }
