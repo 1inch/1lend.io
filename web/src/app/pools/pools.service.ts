@@ -148,6 +148,11 @@ export class PoolsService {
                                 resultPool.lastInterest = interest[interest.length - 1];
                                 resultPool.minInterest = interest.reduce((a, b) => a > b ? b : a);
                                 resultPool.maxInterest = interest.reduce((a, b) => a > b ? a : b);
+
+                                this.getSlippageOf(pool.name, token, amount)
+                                    .then((slippage) => {
+                                        resultPool.slippage = slippage;
+                                    });
                             });
 
                         this.isApproved(pool.name, token)
@@ -158,11 +163,6 @@ export class PoolsService {
                         this.getBalanceOf(pool.name, token)
                             .then((balance) => {
                                 resultPool.balance = balance;
-                            });
-
-                        this.getSlippageOf(pool.name, token, amount)
-                            .then((slippage) => {
-                                resultPool.slippage = slippage;
                             });
 
                         result.push(resultPool);
