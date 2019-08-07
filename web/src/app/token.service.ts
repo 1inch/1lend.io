@@ -38,51 +38,6 @@ const TokenBalanceAggregatorABI = [
 })
 export class TokenService {
 
-    public poolTokens = {
-        DAI: {
-            symbol: 'DAI',
-            name: 'Dai',
-            decimals: 18,
-            address: '0x89d24a6b4ccb1b6faa2625fe562bdd9a23260359'
-        },
-        ETH: {
-            symbol: 'ETH',
-            name: 'Ethereum',
-            decimals: 18,
-            address: '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE'
-        },
-        WBTC: {
-            symbol: 'WBTC',
-            name: 'Wrapped BTC',
-            decimals: 8,
-            address: '0x2260fac5e5542a773aa44fbcfedf7c193bc2c599'
-        },
-        REP: {
-            symbol: 'REP',
-            name: 'Augur',
-            decimals: 18,
-            address: '0x1985365e9f78359a9b6ad760e32412f4a445e862'
-        },
-        USDC: {
-            symbol: 'USDC',
-            name: 'USD Coin',
-            decimals: 6,
-            address: '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48'
-        },
-        BAT: {
-            symbol: 'BAT',
-            name: 'Basic Attention Token',
-            decimals: 18,
-            address: '0x0d8775f648430679a709e98d2b0cb6250d2887ef'
-        },
-        ZRX: {
-            symbol: 'ZRX',
-            name: '0x Protocol',
-            decimals: 18,
-            address: '0xe41d2489571d322189246dafa5ebde1f4699f498'
-        },
-    };
-
     public tokens = {
         ABX: {
             symbol: 'ABX',

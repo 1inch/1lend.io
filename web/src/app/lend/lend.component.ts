@@ -64,7 +64,7 @@ export class LendComponent implements OnInit {
 
     ngOnInit() {
 
-        this.tokens = this.tokenService.poolTokens;
+        this.tokens = this.tokenService.tokens;
 
         this.initOnChangeStream();
 

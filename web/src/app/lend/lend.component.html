@@ -47,7 +47,7 @@
                                         id="fromTokenDropdown" ngbDropdownToggle
                                         type="button">
                                         <span>
-                                            <img [src]="'assets/tokens/asset_' + tokens[fromToken].symbol + '.svg'"
+                                            <img [src]="'assets/tokens/' + tokens[fromToken].address.toLowerCase() + '.png'"
                                                  class="mr-1"
                                                  style="width: 24px">
 
@@ -72,7 +72,7 @@
                                                     *ngFor="let token of fromTokenSearchResults | async"
                                                     class="list-group-item">
                                                     <img
-                                                        [src]="'assets/tokens/asset_' + token.symbol + '.svg'"
+                                                        [src]="'assets/tokens/' + token.address.toLowerCase() + '.png'"
                                                         class="mr-1"
                                                         style="width: 16px">
 
@@ -122,9 +122,9 @@
                                     #firstPoolTokenTemplate>{{(pool.name === 'bancor' ? 'BNT' : 'ETH')}}</ng-template>
                                 <ng-template #secondPoolToken>{{tokens[pool.token].symbol}}</ng-template>
 
-                                <img [src]="'assets/tokens/asset_' + (pool.name === 'bancor' ? 'BNT' : 'ETH') + '.svg'"
+                                <img [src]="'assets/tokens/' + (pool.name === 'bancor' ? 'BNT' : 'ETH').toLowerCase() + '.svg'"
                                      [tooltip]="firstPoolTokenTemplate" style="width: 24px">
-                                <img [src]="'assets/tokens/asset_' + tokens[pool.token].symbol + '.svg'"
+                                <img [src]="'assets/tokens/' + tokens[pool.token].symbol.toLowerCase() + '.svg'"
                                      [tooltip]="secondPoolToken" style="width: 24px; margin-left: -8px;">
                             </span>
                         </td>
@@ -135,8 +135,7 @@
                                 <div *ngIf="pool.interest.length > 1" style="white-space: nowrap;">
                                     <div style="font-size: 0.7em; color: #5F5;">{{toFixed(pool.maxInterest, 2)}}%</div>
                                     <div
-                                        style="font-size: 1em; color: #6b66ff;">{{toFixed((pool.maxInterest + pool.minInterest) / 2, 2)}}
-                                        %
+                                        style="font-size: 1em; color: #6b66ff;">{{toFixed((pool.maxInterest + pool.minInterest) / 2, 2)}}%
                                     </div>
                                     <div style="font-size: 0.7em; color: #F55;">{{toFixed(pool.minInterest, 2)}}%</div>
                                 </div>
@@ -176,12 +175,12 @@
 
                                         <span style="white-space: nowrap;">
                                             {{pool.balance[0].balance}}
-                                            <img [src]="'assets/tokens/asset_' + pool.balance[0].symbol + '.svg'"
+                                            <img [src]="'assets/tokens/' + pool.balance[0].address.toLowerCase() + '.png'"
                                                  [tooltip]="firstTokenTemplate" style="width: 16px">
                                         </span><br>
                                         <span style="white-space: nowrap;">
                                         {{pool.balance[1].balance}}
-                                            <img [src]="'assets/tokens/asset_' + pool.balance[1].symbol + '.svg'"
+                                            <img [src]="'assets/tokens/' + pool.balance[1].address.toLowerCase() + '.png'"
                                                  [tooltip]="secondTokenTemplate" style="width: 16px">
                                         </span>
                                     </span>
@@ -199,7 +198,7 @@
 
                                     <span style="white-space: nowrap;">
                                     {{pool.balance[0].balance}}
-                                        <img [src]="'assets/tokens/asset_' + pool.balance[0].symbol + '.svg'"
+                                        <img [src]="'assets/tokens/' + pool.balance[0].address.toLowerCase() + '.png'"
                                              [tooltip]="tokenTemplate" style="width: 20px">
                                     </span>
                                 </span>
