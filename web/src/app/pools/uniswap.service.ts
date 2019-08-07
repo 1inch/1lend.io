@@ -279,7 +279,7 @@ export class UniswapService implements PoolInterface {
             web3Provider.getSigner()
         );
 
-        const daiBalance = await this.tokenService.getTokenBalanceByAddress(tokenAddress, exchangeAddress);
+        const tokenBalance = await this.tokenService.getTokenBalanceByAddress(tokenAddress, exchangeAddress);
         const ethBalance = await this.web3Service.provider.getBalance(exchangeAddress);
 
         return contract.addLiquidity(
@@ -287,7 +287,7 @@ export class UniswapService implements PoolInterface {
             ethers.utils.bigNumberify(2).pow(255),
             Math.ceil(Date.now() / 1000) + 60 * 15,
             {
-                value: amount.mul(ethBalance).div(daiBalance).mul(90).div(100),
+                value: amount.mul(ethBalance).div(tokenBalance),
                 gasPrice: this.configurationService.fastGasPrice
             }
         );
