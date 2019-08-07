@@ -200,7 +200,7 @@
                                     <span style="white-space: nowrap;">
                                     {{pool.balance[0].balance}}
                                         <img [src]="'assets/tokens/asset_' + pool.balance[0].symbol + '.svg'"
-                                             [tooltip]="tokenTemplate" style="width: 16px">
+                                             [tooltip]="tokenTemplate" style="width: 20px">
                                     </span>
                                 </span>
                                 <span *ngIf="!pool.balance !== null && !isArray(pool.balance)">
@@ -224,7 +224,7 @@
                                             class="btn btn-sm btn-warning mt-1">
                                         Approve {{pool.token}}
                                     </button>
-                                    <button (click)="withdraw(pool.name)" [disabled]="pool.balance === 0"
+                                    <button (click)="withdraw(pool.name)" [disabled]="pool.balance == 0"
                                             class="btn btn-sm btn-danger ml-1 mt-1">
                                         Withdraw
                                     </button>

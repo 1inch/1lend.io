@@ -63,7 +63,7 @@ export class PoolsService {
         },
         {
             name: 'compound-v2',
-            title: 'Compound V2',
+            title: 'Compound',
             icon: 'compound-v2.svg',
             lightThemeIconInvert: false,
             darkThemeIconInvert: false,
