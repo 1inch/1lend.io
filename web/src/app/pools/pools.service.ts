@@ -23,7 +23,8 @@ export class PoolsService {
             lightThemeIconInvert: true,
             darkThemeIconInvert: false,
             type: 'single',
-            active: false
+            active: false,
+            url: 'https://app.reloanr.com/'
         },
         {
             name: 'ethlend',
@@ -32,7 +33,8 @@ export class PoolsService {
             lightThemeIconInvert: true,
             darkThemeIconInvert: false,
             type: 'single',
-            active: false
+            active: false,
+            url: 'https://ethlend.io'
         },
         {
             name: 'kyber',
@@ -41,7 +43,8 @@ export class PoolsService {
             lightThemeIconInvert: true,
             darkThemeIconInvert: false,
             type: 'double',
-            active: false
+            active: false,
+            url: 'https://kyber.network'
         },
         {
             name: 'bancor',
@@ -50,7 +53,8 @@ export class PoolsService {
             lightThemeIconInvert: true,
             darkThemeIconInvert: true,
             type: 'double',
-            active: false
+            active: false,
+            url: 'https://bancor.network'
         },
         {
             name: 'uniswap',
@@ -77,7 +81,8 @@ export class PoolsService {
             lightThemeIconInvert: false,
             darkThemeIconInvert: true,
             type: 'single',
-            active: false
+            active: false,
+            url: 'https://www.dharma.io'
         },
         {
             name: 'nuo',
@@ -86,7 +91,8 @@ export class PoolsService {
             lightThemeIconInvert: false,
             darkThemeIconInvert: false,
             type: 'single',
-            active: false
+            active: false,
+            url: 'https://www.nuo.network'
         },
         {
             name: 'fulcrum',
@@ -95,7 +101,8 @@ export class PoolsService {
             lightThemeIconInvert: false,
             darkThemeIconInvert: false,
             type: 'single',
-            active: false
+            active: false,
+            url: 'https://fulcrum.trade'
         }
     ];
 
@@ -143,7 +150,8 @@ export class PoolsService {
                             lightThemeIconInvert: pool.lightThemeIconInvert,
                             darkThemeIconInvert: pool.darkThemeIconInvert,
                             type: pool.type,
-                            active: pool.active
+                            active: pool.active,
+                            url: pool.url
                         };
 
                         this.getInterestOf(pool.name, token)
