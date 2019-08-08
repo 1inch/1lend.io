@@ -175,12 +175,12 @@
 
                                         <span style="white-space: nowrap;">
                                             {{pool.balance[0].balance}}
-                                            <img [src]="'assets/tokens/' + pool.balance[0].address.toLowerCase() + '.png'"
+                                            <img [src]="'assets/tokens/' + tokens[pool.balance[0].symbol].address.toLowerCase() + '.png'"
                                                  [tooltip]="firstTokenTemplate" style="width: 16px">
                                         </span><br>
                                         <span style="white-space: nowrap;">
                                         {{pool.balance[1].balance}}
-                                            <img [src]="'assets/tokens/' + pool.balance[1].address.toLowerCase() + '.png'"
+                                            <img [src]="'assets/tokens/' + tokens[pool.balance[1].symbol].address.toLowerCase() + '.png'"
                                                  [tooltip]="secondTokenTemplate" style="width: 16px">
                                         </span>
                                     </span>
@@ -225,15 +225,15 @@
                             <div *ngIf="pool.active">
                                 <div *ngIf="web3Service.walletAddress">
                                     <button (click)="deposit(pool.name)" *ngIf="pool.approved"
-                                            class="btn btn-sm btn-success mt-1">Deposit
+                                            class="btn btn-sm btn-success mt-1 mb-1">Deposit
                                     </button>
                                     <button (click)="approve(pool.name)"
                                             *ngIf="!pool.approved && pool.approved !== null"
-                                            class="btn btn-sm btn-warning mt-1">
-                                        Approve {{pool.token}}
+                                            class="btn btn-sm btn-warning mt-1 mb-1">
+                                        Approve
                                     </button>
                                     <button (click)="withdraw(pool.name)" [disabled]="pool.balance == 0"
-                                            class="btn btn-sm btn-danger ml-1 mt-1">
+                                            class="btn btn-sm btn-danger ml-1 mt-1 mb-1">
                                         Withdraw
                                     </button>
                                 </div>
