@@ -122,9 +122,9 @@
                                     #firstPoolTokenTemplate>{{(pool.name === 'bancor' ? 'BNT' : 'ETH')}}</ng-template>
                                 <ng-template #secondPoolToken>{{tokens[pool.token].symbol}}</ng-template>
 
-                                <img [src]="'assets/tokens/' + (pool.name === 'bancor' ? 'BNT' : 'ETH').toLowerCase() + '.svg'"
+                                <img [src]="'assets/tokens/' + tokens[(pool.name === 'bancor' ? 'BNT' : 'ETH')].address.toLowerCase() + '.png'"
                                      [tooltip]="firstPoolTokenTemplate" style="width: 24px">
-                                <img [src]="'assets/tokens/' + tokens[pool.token].symbol.toLowerCase() + '.svg'"
+                                <img [src]="'assets/tokens/' + tokens[pool.token].address.toLowerCase() + '.png'"
                                      [tooltip]="secondPoolToken" style="width: 24px; margin-left: -8px;">
                             </span>
                         </td>
