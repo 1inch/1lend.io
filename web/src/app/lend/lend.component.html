@@ -198,7 +198,7 @@
 
                                     <span style="white-space: nowrap;">
                                     {{pool.balance[0].balance}}
-                                        <img [src]="'assets/tokens/' + pool.balance[0].address.toLowerCase() + '.png'"
+                                        <img [src]="'assets/tokens/' + tokens[pool.balance[0].symbol].address.toLowerCase() + '.png'"
                                              [tooltip]="tokenTemplate" style="width: 20px">
                                     </span>
                                 </span>
