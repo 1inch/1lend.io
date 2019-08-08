@@ -158,9 +158,11 @@ export class PoolsService {
                             .then((interest) => {
                                 resultPool.interest = interest;
 
-                                resultPool.lastInterest = interest[interest.length - 1];
-                                resultPool.minInterest = interest.reduce((a, b) => a > b ? b : a);
-                                resultPool.maxInterest = interest.reduce((a, b) => a > b ? a : b);
+                                if (interest.length > 0) {
+                                    resultPool.lastInterest = interest[interest.length - 1];
+                                    resultPool.minInterest = interest.reduce((a, b) => a > b ? b : a);
+                                    resultPool.maxInterest = interest.reduce((a, b) => a > b ? a : b);
+                                }
 
                                 this.getSlippageOf(pool.name, token, amount)
                                     .then((slippage) => {
@@ -196,118 +198,138 @@ export class PoolsService {
 
     async getBalanceOf(pool: string, token: string) {
 
-        if (!this.web3Service.walletAddress) {
-
-            return ethers.utils.bigNumberify(0);
-        }
-
         try {
 
-            switch (pool) {
-                case 'compound-v2':
+            if (!this.web3Service.walletAddress) {
 
-                    return await this.compoundService.getFormatedBalance(token, this.web3Service.walletAddress);
-                    break;
-                case 'uniswap':
+                return ethers.utils.bigNumberify(0);
+            }
 
-                    return await this.uniswapService.getFormatedTokensBalance(
-                        token,
-                        this.web3Service.walletAddress
-                    );
-                    break;
-                default:
-                    return ethers.utils.bigNumberify(0);
-                    break;
+            try {
+
+                switch (pool) {
+                    case 'compound-v2':
+
+                        return await this.compoundService.getFormatedBalance(token, this.web3Service.walletAddress);
+                        break;
+                    case 'uniswap':
+
+                        return await this.uniswapService.getFormatedTokensBalance(
+                            token,
+                            this.web3Service.walletAddress
+                        );
+                        break;
+                    default:
+                        return ethers.utils.bigNumberify(0);
+                        break;
+                }
+            } catch (e) {
+
+                console.error(e);
+                return ethers.utils.bigNumberify(0);
             }
         } catch (e) {
 
-            console.error(e);
             return ethers.utils.bigNumberify(0);
         }
     }
 
     async getInterestOf(pool: string, token: string): Promise<Array<number>> {
 
-        switch (pool) {
-            case 'compound-v2':
-
-                return this.compoundService.interest(token);
-                break;
-            case 'uniswap':
-
-                return this.uniswapService.interest(
-                    this.tokenService.tokens[token].address
-                );
-
-                break;
-            case 'kyber':
-
-                return this.kyberService.interest(
-                    this.tokenService.tokens[token].address
-                );
-
-                break;
-            case 'lendroid':
-
-                return this.lendroidService.interest(
-                    this.tokenService.tokens[token].address
-                );
-
-                break;
-            case 'ethlend':
-
-                return this.ethlendService.interest(
-                    token
-                );
-
-                break;
-            default:
-                return [
-                    0
-                ];
-                break;
-        }
-    }
-
-    async isApproved(pool: string, token: string) {
-
-        if (token === 'ETH') {
-
-            return true;
-        }
-
-        if (this.web3Service.walletAddress) {
+        try {
 
             switch (pool) {
-                case 'uniswap':
-
-                    return this.tokenService.isApproved(
-                        token,
-                        await this.uniswapService.getExchangeAddress(this.tokenService.tokens[token].address)
-                    );
-
-                    break;
                 case 'compound-v2':
 
-                    return this.tokenService.isApproved(
-                        token,
-                        this.tokenService.tokens['c' + token].address
+                    return this.compoundService.interest(token);
+                    break;
+                case 'uniswap':
+
+                    return this.uniswapService.interest(
+                        this.tokenService.tokens[token].address
                     );
 
                     break;
                 case 'kyber':
 
-                    return this.tokenService.isApproved(
-                        token,
-                        this.configurationService.KYBER_NETWORK_PROXY_CONTRACT_ADDRESS
+                    return this.kyberService.interest(
+                        this.tokenService.tokens[token].address
+                    );
+
+                    break;
+                case 'lendroid':
+
+                    return this.lendroidService.interest(
+                        this.tokenService.tokens[token].address
+                    );
+
+                    break;
+                case 'ethlend':
+
+                    return this.ethlendService.interest(
+                        token
                     );
 
                     break;
                 default:
-                    return false;
+                    return [
+                        0
+                    ];
                     break;
             }
-        } else {
+        } catch (e) {
+
+            return [
+                0
+            ];
+        }
+    }
+
+    async isApproved(pool: string, token: string) {
+
+        try {
+
+            if (token === 'ETH') {
+
+                return true;
+            }
+
+            if (this.web3Service.walletAddress) {
+
+                switch (pool) {
+                    case 'uniswap':
+
+                        return this.tokenService.isApproved(
+                            token,
+                            await this.uniswapService.getExchangeAddress(this.tokenService.tokens[token].address)
+                        );
+
+                        break;
+                    case 'compound-v2':
+
+                        return this.tokenService.isApproved(
+                            token,
+                            this.tokenService.tokens['c' + token].address
+                        );
+
+                        break;
+                    case 'kyber':
+
+                        return this.tokenService.isApproved(
+                            token,
+                            this.configurationService.KYBER_NETWORK_PROXY_CONTRACT_ADDRESS
+                        );
+
+                        break;
+                    default:
+                        return false;
+                        break;
+                }
+            } else {
+
+                return false;
+            }
+        } catch (e) {
 
             return false;
         }
@@ -416,30 +438,36 @@ export class PoolsService {
 
     async getSlippageOf(pool: string, token: string, amount: BigNumber) {
 
-        switch (pool) {
-            case 'compound-v2':
+        try {
 
-                return this.compoundService.slippage(token, amount);
-                break;
-            case 'uniswap':
+            switch (pool) {
+                case 'compound-v2':
 
-                return this.uniswapService.slippage(
-                    this.tokenService.tokens[token].address,
-                    amount
-                );
+                    return this.compoundService.slippage(token, amount);
+                    break;
+                case 'uniswap':
 
-                break;
-            case 'kyber':
+                    return this.uniswapService.slippage(
+                        this.tokenService.tokens[token].address,
+                        amount
+                    );
 
-                return this.kyberService.slippage(
-                    this.tokenService.tokens[token].address,
-                    amount
-                );
+                    break;
+                case 'kyber':
 
-                break;
-            default:
-                return ethers.utils.bigNumberify(0);
-                break;
+                    return this.kyberService.slippage(
+                        this.tokenService.tokens[token].address,
+                        amount
+                    );
+
+                    break;
+                default:
+                    return ethers.utils.bigNumberify(0);
+                    break;
+            }
+        } catch (e) {
+
+            return ethers.utils.bigNumberify(0);
         }
     }
 }

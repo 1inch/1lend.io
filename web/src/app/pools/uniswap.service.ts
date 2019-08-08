@@ -189,9 +189,9 @@ export class UniswapService implements PoolInterface {
 
         const duration = newBlock.timestamp - oldBlock.timestamp;
         const results = rawResult.map(res => contract.interface.parseLog(res));
-        let feePercent = new BNSMA(movingKoef * delta / points);
+        const feePercent = new BNSMA(movingKoef * delta / points);
 
-        let averages = [];
+        const averages = [];
         let lastAddedBlock = currentBlock;
         for (let i = results.length - 1; i > 0; i--) {
 
@@ -238,7 +238,12 @@ export class UniswapService implements PoolInterface {
         }
 
         // console.log('store to cache');
-        this.instanceCache['interest_' + tokenAddress] = averages.reduce((a, b) => a + b) / averages.length;
+
+        if (averages.length > 0) {
+
+            this.instanceCache['interest_' + tokenAddress] = averages.reduce((a, b) => a + b) / averages.length;
+        }
+
         return averages.reverse();
     }
 

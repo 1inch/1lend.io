@@ -318,18 +318,13 @@ export class LendComponent implements OnInit {
                 );
             }
 
-            this.fromTokenBalance = this.toFixed(this.fromTokenBalance, 18);
+            this.fromTokenBalance = this.tokenService.toFixed(this.fromTokenBalance, 18);
 
             if (this.fromTokenBalance === '0') {
                 this.fromTokenBalance = '0.0';
                 this.fromTokenBalanceBN = ethers.utils.bigNumberify(0);
             }
         }
-    }
-
-    toFixed(num, fixed) {
-        const re = new RegExp('^-?\\d+(?:\.\\d{0,' + (fixed || -1) + '})?');
-        return num.toString().match(re)[0];
     }
 
     getRequestIdentifier() {

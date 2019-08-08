@@ -55,6 +55,11 @@ export class CompoundService implements PoolInterface {
 
         tokenSymbol = 'c' + tokenSymbol;
 
+        if (typeof this.tokenService.tokens[tokenSymbol] === 'undefined') {
+
+            return [0];
+        }
+
         const contract = new ethers.Contract(
             this.tokenService.tokens[tokenSymbol].address,
             CERC20_ABI,
@@ -82,6 +87,11 @@ export class CompoundService implements PoolInterface {
     async slippage(tokenSymbol: string, amount: BigNumber): Promise<number> {
 
         tokenSymbol = 'c' + tokenSymbol;
+
+        if (typeof this.tokenService.tokens[tokenSymbol] === 'undefined') {
+
+            return 0.0;
+        }
 
         const contract = new ethers.Contract(
             this.tokenService.tokens[tokenSymbol].address,
