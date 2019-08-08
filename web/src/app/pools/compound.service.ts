@@ -35,6 +35,19 @@ export class CompoundService implements PoolInterface {
         return contract.balanceOfUnderlying(walletAddress);
     }
 
+    getRawBalance(tokenSymbol: string, walletAddress: string): Promise<BigNumber> {
+
+        tokenSymbol = 'c' + tokenSymbol;
+
+        const contract = new ethers.Contract(
+            this.tokenService.tokens[tokenSymbol].address,
+            CERC20_READ_ONLY_ABI,
+            this.web3Service.provider
+        );
+
+        return contract.balanceOf(walletAddress);
+    }
+
     async getFormatedBalance(tokenSymbol: string, walletAddress: string): Promise<any> {
 
         return [
@@ -152,7 +165,7 @@ export class CompoundService implements PoolInterface {
         );
 
         return contract.redeem(
-            await this.getBalance(tokenSymbol, walletAddress),
+            await this.getRawBalance(tokenSymbol, walletAddress),
             {
                 gasPrice: this.configurationService.fastGasPrice
             }
